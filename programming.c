@@ -3,5 +3,5 @@
 #pragma warning(disable:4996)
 
 main(){
-  
+  printf("")
 }
