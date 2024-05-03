@@ -74,7 +74,7 @@ void loginMemberAcc();
 void forgetMemberPassword();
 void memberSecondMenu();
 bool memberInformation(Members* member, bool accountDeleted);
-void searchMemberInformation();
+void searchMemberInformation(Members* mem);
 void displayMemberInformation(Members* mem);
 void modifyMemberInformation(Members* mem);
 void memberLost();
@@ -87,7 +87,7 @@ void main() {
 	int choice;
 	do {
 		printf("=======================\n");
-		printf("WELCOME TO TRAIN!\n");
+		printf("WELCOME TO TRAIN TICKETING SYSTEM!\n");
 		printf("=======================\n\n");
 		printf("MAIN MENU\n\n");
 		printf("1. Staff Page\n");
@@ -541,7 +541,7 @@ bool memberInformation(Members *member, bool accountDeleted) {
 		system("cls");
 		switch (memThirdChoice) {
 		case 1:
-			searchMemberInformation();
+			searchMemberInformation(&currentMem);
 			break;
 		case 2:
 			modifyMemberInformation(&currentMem);
@@ -592,7 +592,7 @@ bool memberInformation(Members *member, bool accountDeleted) {
 	return accountDeleted;
 }
 
-void searchMemberInformation() {
+void searchMemberInformation(Members *mem) {
 	Invoice booking;
 	char choice;
 	char bookingID[10];
@@ -624,6 +624,9 @@ void searchMemberInformation() {
 		rewind(stdin);
 		scanf("%s", &bookingID);
 
+		//need to refer invoice structure
+		//if the memberID is added, change the fscanf accordingly
+		//That's why still got error
 		while (fscanf(bookingPtr, "%[^|]|%[^|]|%d|%lf|%[^|]|%d/%d/%d\n",
 			booking.invoiceNo, booking.invTrnID, &booking.ticketQtt, &booking.totalAmount,
 			booking.paymentInfo, &booking.paymentDate.day, &booking.paymentDate.month, &booking.paymentDate.year) != EOF) {
@@ -637,7 +640,7 @@ void searchMemberInformation() {
 					booking.ticBook[i].selectedMeal.mainFood, booking.ticBook[i].selectedMeal.drinks,
 					booking.ticBook[i].selectedMeal.snacks, &booking.ticBook[i].selectedMeal.mealPrice);
 			}
-			if (strcmp(booking.invoiceNo, bookingID) == 0) {
+			if (strcmp(booking.invoiceNo, bookingID) == 0 && strcmp(booking.memberID, mem->memberID) == 0) {
 				found = 1;
 				break;
 			}
@@ -676,6 +679,7 @@ void searchMemberInformation() {
 			printf("Invalid choice. Please re-enter your choice (Y=Yes/N=No): ");
 			scanf(" %c", &choice);
 		}
+		system("cls");
 	}
 	fclose(bookingPtr);
 }
@@ -691,6 +695,7 @@ void modifyMemberInformation(Members *mem) {
 	char oldMemberPassword[30];
 	char newMemberPassword[30];
 	char rePassword[30];
+	char choice;
 	Members modifyCurrentMem;
 	Members member[MAXMEMBER];
 	modifyCurrentMem = *mem;
@@ -719,6 +724,7 @@ void modifyMemberInformation(Members *mem) {
 		switch (memFourthChoice) {
 		case 1:
 			printf("CHANGE CONTACT\n\n");
+			printf("Your current phone number is %s.\n\n", modifyCurrentMem.memberContact);
 			printf("Please enter your new phone number (10 or 11 digits without '-'): ");
 			rewind(stdin);
 			scanf("%s", &newMemberContact);
@@ -742,29 +748,40 @@ void modifyMemberInformation(Members *mem) {
 					}
 				}
 			} while (!isValid);
-			strcpy(modifyCurrentMem.memberContact, newMemberContact);
 
-			modifyMemPtr = fopen("memberInfo.bin", "wb");
-
-			if (modifyMemPtr == NULL) {
-				printf("Unable to open the file...\n\n");
-				exit(-1);
-			}
-
-			for (i = 0; i < count ; i++) {
-				if (strcmp(member[i].memberID, modifyCurrentMem.memberID) == 0) {
-					strcpy(member[i].memberContact, modifyCurrentMem.memberContact);
-					modifyArray = i;
-					break;
-				}
-			}
-
-			for (i = 0; i < count; i++) {
-				fwrite(&member[i], sizeof(Members), 1, modifyMemPtr);
+			printf("Are you sure you want to change your phone number? (Y=Yes/N=No): ");
+			scanf("% c", &choice);
+			while (toupper(choice != 'Y' && toupper(choice) != 'N')) {
+				printf("Invalid choice. Please re-enter your choice (Y=Yes/N=No): ");
+				scanf(" %c", &choice);
 			}
 			system("cls");
-			printf("Your phone number is now changed to %s.\n\n", member[modifyArray].memberContact);
-			fclose(modifyMemPtr);
+			if (toupper(choice) == 'Y') {
+				strcpy(modifyCurrentMem.memberContact, newMemberContact);
+
+				modifyMemPtr = fopen("memberInfo.bin", "wb");
+
+				if (modifyMemPtr == NULL) {
+					printf("Unable to open the file...\n\n");
+					exit(-1);
+				}
+
+				for (i = 0; i < count; i++) {
+					if (strcmp(member[i].memberID, modifyCurrentMem.memberID) == 0) {
+						strcpy(member[i].memberContact, modifyCurrentMem.memberContact);
+						modifyArray = i;
+						break;
+					}
+				}
+
+				for (i = 0; i < count; i++) {
+					fwrite(&member[i], sizeof(Members), 1, modifyMemPtr);
+				}
+				
+				printf("Your phone number is now changed to %s.\n\n", member[modifyArray].memberContact);
+
+				fclose(modifyMemPtr);
+			}
 			break;
 		case 2:
 			printf("CHANGE PASSWORD\n\n");
