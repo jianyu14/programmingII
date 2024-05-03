@@ -1545,7 +1545,7 @@ void trainOccupancyRate() {
 			printf("%-18s%-10s%-20s%-20s%-16s\n", "***********", "********", "****************", "***************", "**************");
 			for (int af = 0;af < countS;af++) {
 				occupancyR = (double)schList[af].countOfSch / 120;
-				printf("%-18s%-10s%-20s%-20s%-16.2lf%%\n", schList[af].schedule.scheduleNo, schList[af].schedule.trainID,
+				printf("%-18s%-10s%-20s%-20s%.2lf%%\n", schList[af].schedule.scheduleNo, schList[af].schedule.trainID,
 					schList[af].schedule.departureStation, schList[af].schedule.arrivalStation, occupancyR * 100);
 
 			}
