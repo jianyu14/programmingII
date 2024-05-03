@@ -59,6 +59,67 @@ typedef struct {
 	char IC[13];
 }Staff;
 
+addStaff();
+displayStaffList();
+forgatPassword();
+foundItem();
+genegrateReport();
+loginManager();
+loginStaff();
+lostAndFoundList();
+managerFirstMenu();
+managerSecondMenu();
+staffFirstMenu();
+staffSecondMenu();
+removeItem();
+removeStaff();
+searchStaff();
+updateContact();
+updatePassword();
+updatePosition();
+updateSalary();
+updateSatffInfo();
+updateStaInfo();
+
+void main() {
+
+	int select;
+
+	do {
+		printf("WELCOME BACK ~\n");
+		printf("==============\n");
+		printf("1.Manager\n");
+		printf("2.Staff\n");
+		printf("3.Exit\n");
+		printf("Enter a number: ");
+		scanf("%d", &select);
+
+		switch (select) {
+
+		case 1:
+			managerSecondMenu();
+			break;
+
+		case 2:
+			staffSecondMenu();
+			break;
+
+		case 3:
+			printf("Exit now.........\n");
+			printf("\n\n");
+			break;
+
+		default:
+			printf("Invalid Number!!!\n");
+			printf("Please enter again.\n");
+			printf("\n\n");
+			break;
+		}
+	} while (select != 3);
+
+	system("pause");
+}
+
 addstaff() {
 
 	FILE* staff;
@@ -1049,41 +1110,3 @@ staffFirstMenu() {
 	} while (option != 5);
 }
 
-void main() {
-
-	int select;
-
-	do {
-		printf("WELCOME BACK ~\n");
-		printf("==============\n");
-		printf("1.Manager\n");
-		printf("2.Staff\n");
-		printf("3.Exit\n");
-		printf("Enter a number: ");
-		scanf("%d", &select);
-			
-		switch (select) {
-
-			case 1:
-				managerSecondMenu();
-				break;
-
-			case 2:
-				staffSecondMenu();
-				break;
-
-			case 3:
-				printf("Exit now.........\n");
-				printf("\n\n");
-				break;
-
-			default:
-				printf("Invalid Number!!!\n");
-				printf("Please enter again.\n");
-				printf("\n\n");
-				break;
-		}
-	} while (select != 3);
-
-	system("pause");
-}
