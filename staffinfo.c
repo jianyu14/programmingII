@@ -1005,7 +1005,7 @@ staffSecondMenu() {
 		break;
 
 	case 2:
-		loginStaff();
+		forgetPassword();
 		break;
 
 	default:
