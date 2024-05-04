@@ -51,8 +51,7 @@ typedef struct {
 	char gender;
 	char phoneno[12];
 	char position[30];
-	char date[10];
-	// Date date[11];
+	Date date[11];
 	int salary;
 	char password[20];
 	struct validation valid;
@@ -81,7 +80,7 @@ updateSalary();
 updateSatffInfo();
 updateStaInfo();
 
-void staffMain() {
+void main() {
 
 	int select;
 
@@ -339,7 +338,7 @@ removeItem() {
 	FILE* lostRemovePtr;
 	FILE* tempFile;
 	Lost lost;
-
+	int found = 0;
 	char itemToRemove[7];
 
 	lostRemovePtr = fopen("lost.bin", "rb");
@@ -357,25 +356,27 @@ removeItem() {
 	printf("Enter the lost ID that you want to remove: ");
 	scanf("%s", &itemToRemove);
 
-	while (fread(&lost, sizeof(Lost), 1, lostRemovePtr) == 1) {
-		if (strcmp(lost.itemID, itemToRemove) != 0)
+	while (fread(&lost, sizeof(Lost), 1, lostRemovePtr)) {
+		if (strcmp(lost.itemID, itemToRemove) != 0) {
+			printf("A record with requested name found and deleted.\n\n");
+			found = 1;
+		}
+		else {
 			fwrite(&lost, sizeof(Lost), 1, tempFile);
+		}
+	}
+	if (!found) {
+		printf("No match!\n");
 	}
 
 	fclose(lostRemovePtr);
 	fclose(tempFile);
 
-	if (remove("lost.bin") != 0) {
-		printf("Error removing the original file!\n");
-		exit(-1);
-	}
+	remove("lost.bin");
 
-	if (rename("temp.bin", "lost.bin") != 0) {
-		printf("Error renaming the temporary file!\n");
-		exit(-1);
-	}
+	rename("temp.bin", "lost.bin");
 
-	printf("Item with ID %s removed successfully!\n", itemToRemove);
+	system("pause");
 }
 
 loginManager() {
@@ -383,7 +384,7 @@ loginManager() {
 	FILE* staff;
 	Staff sta;
 	char logID[7];
-	char logPassword[9];
+	char logPassword[20];
 	char ans;
 
 	staff = fopen("staff.bin", "rb");
@@ -876,39 +877,46 @@ removeStaff() {
 	FILE* tempFile;
 	Staff sta;
 	char idToRemove[7];
+	int found = 0;
 
 	staff = fopen("staff.bin", "rb");
 	tempFile = fopen("temp.bin", "wb");
 
 	system("cls");
+
 	if (staff == NULL || tempFile == NULL) {
 		printf("Unable to open the file for reading!\n");
 		exit(-1);
 	}
-	printf("REMOVE THE STAFF\n");
-	printf("================\n\n");
 
-	printf("Enter the staff ID that you want to remove: ");
-	scanf("%s", &idToRemove);
-	while (fread(&sta, sizeof(Staff), 1, staff) == 1) {
-		if (strcmp(sta.ID, idToRemove) != 0)
+	printf("REMOVE STAFF\n");
+	printf("===========\n\n");
+
+	printf("Enter the ID that you want to remove: ");
+	rewind(stdin);
+	scanf("%s", idToRemove);
+
+	while (fread(&sta, sizeof(Staff), 1, staff)) {
+		if (strcmp(sta.ID, idToRemove) != 0) {
+			printf("A record with requested name found and deleted.\n\n");
+			found = 1;
+		}
+		else {
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
+		}
+	}
+	if (!found) {
+		printf("No match!\n");
 	}
 
 	fclose(staff);
 	fclose(tempFile);
 
-	if (remove("staff.bin") != 0) {
-		printf("Error removing the original file!\n");
-		exit(-1);
-	}
+	remove("staff.bin");
 
-	if (rename("temp.bin", "staff.bin") != 0) {
-		printf("Error renaming the temporary file!\n");
-		exit(-1);
-	}
+	rename("temp.bin", "staff.bin");
 
-	printf("Staff member with ID %s removed successfully!\n", idToRemove);
+	system("pause");
 }
 
 generateReport() {
@@ -948,7 +956,7 @@ generateReport() {
 				}
 			}
 			if (!found) {
-				printf("Not found!!\n");
+				printf("No staff found with the specified position.\n");
 			}
 
 			printf("View another (Y=yes)? ");
@@ -987,15 +995,29 @@ staffSecondMenu() {
 	printf("==========\n");
 	printf("1.Login\n");
 	printf("2.Forget Password\n");
+	printf("3.Add Staff\n");
 	printf("Enter the number: ");
 	scanf("%d", &ans2);
 
-	if (ans2 == 1) {
+	switch (ans2) {
+
+	case 1:
+		loginManager();
+		break;
+
+	case 2:
 		loginStaff();
+		break;
+
+	case 3:
+		addStaff();
+		break;
+
+	default:
+		printf("Invalid value\n");
+		break;
 	}
-	else {
-		forgetPassword();
-	}
+
 }
 
 managerFirstMenu() {
@@ -1007,7 +1029,6 @@ managerFirstMenu() {
 		system("cls");
 		printf("MANAGER MAIN MENU\n");
 		printf("=================\n");
-		printf("1.Add Staff\n");
 		printf("2.Search Staff\n");
 		printf("3.Update Staff Information\n");
 		printf("4.View Staff List\n");
@@ -1020,19 +1041,19 @@ managerFirstMenu() {
 		switch (option) {
 
 		case 1:
-			addstaff();
+			searchStaff(sta, MAXSTAFF);
 			break;
 
 		case 2:
-			searchStaff(sta,MAXSTAFF);
-			break;
-
-		case 3:
 			updateStaffInfo();
 			break;
 
-		case 4:
+		case 3:
 			displayStaffList();
+			break;
+
+		case 4:
+			generateReport();
 			break;
 
 		case 5:
@@ -1040,10 +1061,6 @@ managerFirstMenu() {
 			break;
 
 		case 6:
-			generateReport();
-			break;
-
-		case 7:
 			printf("Exit now.........\n");
 			printf("\n\n");
 			break;
@@ -1053,7 +1070,7 @@ managerFirstMenu() {
 			printf("Please enter again\n");
 			break;
 		}
-	} while (option != 7);
+	} while (option != 6);
 }
 
 staffFirstMenu() {
@@ -1098,6 +1115,10 @@ staffFirstMenu() {
 			break;
 
 		case 6:
+			removeStaff(sta, MAXSTAFF);
+			break;
+
+		case 7:
 			printf("Exit now.........\n");
 			printf("\n\n");
 			break;
@@ -1107,6 +1128,6 @@ staffFirstMenu() {
 			printf("Please enter again.\n");
 			break;
 		}
-	} while (option != 5);
+	} while (option != 7);
 }
 
