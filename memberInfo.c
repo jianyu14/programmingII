@@ -66,7 +66,6 @@ typedef struct {
 	Time foundTime;
 }Found;
 
-void staffMain();
 void memberFirstMenu();
 int getValidChoice(int lowerBound, int upperBound);
 void addMemberAcc();
