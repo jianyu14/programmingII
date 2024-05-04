@@ -1001,7 +1001,7 @@ staffSecondMenu() {
 	switch (ans2) {
 
 	case 1:
-		loginManager();
+		loginStaff();
 		break;
 
 	case 2:
