@@ -750,7 +750,7 @@ void modifyMemberInformation(Members *mem) {
 			} while (!isValid);
 
 			printf("Are you sure you want to change your phone number? (Y=Yes/N=No): ");
-			scanf("% c", &choice);
+			scanf(" %c", &choice);
 			while (toupper(choice != 'Y' && toupper(choice) != 'N')) {
 				printf("Invalid choice. Please re-enter your choice (Y=Yes/N=No): ");
 				scanf(" %c", &choice);
