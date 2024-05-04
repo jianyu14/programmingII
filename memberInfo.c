@@ -105,9 +105,6 @@ void main() {
 			break;
 		case 3:
 			break;
-		default:
-			printf("Invalid choice. Please enter a valid choice(1, 2, 3).\n\n");
-			break;
 		}
 	} while (choice != 3);
 }
@@ -130,9 +127,6 @@ void memberMain() {
 			forgetMemberPassword();
 			break;
 		case 4:
-			break;
-		default:
-			printf("Invalid choice. Please enter a valid choice(1, 2, 3, 4).\n\n");
 			break;
 		}
 		
