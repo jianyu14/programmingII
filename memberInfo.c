@@ -370,7 +370,7 @@ void loginMemberAcc() {
 			system("cls");
 			switch (memSecondChoice) {
 			case 1:
-				//anny
+				userMenuBK(&member[i]);
 				break;
 			case 2:
 				//ziqing
