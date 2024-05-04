@@ -67,7 +67,6 @@ typedef struct {
 }Found;
 
 void memberFirstMenu();
-int getValidChoice(int lowerBound, int upperBound);
 void addMemberAcc();
 void loginMemberAcc();
 void forgetMemberPassword();
@@ -143,23 +142,6 @@ void memberFirstMenu() {
 	printf("Please select your choice from the following: ");
 }
 
-int getValidChoice(int lowerBound, int upperBound) {
-	char input[10];
-	int choice;
-	do {
-		
-		scanf("%s", input);	
-	
-		//convert the input to integer for choice
-		choice = atoi(input);
-		if (choice < lowerBound || choice > upperBound) {
-			printf("Invalid choice. Please enter a number between %d and %d: ", lowerBound, upperBound);
-		}
-		else {
-			return choice;
-		}
-	} while (1);
-}
 
 void addMemberAcc() {
 	char rePassword[30];
