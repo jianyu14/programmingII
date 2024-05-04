@@ -65,7 +65,6 @@ foundItem();
 genegrateReport();
 loginManager();
 loginStaff();
-lostAndFoundList();
 managerFirstMenu();
 managerSecondMenu();
 staffFirstMenu();
@@ -309,29 +308,6 @@ foundItem() {
 	} while (toupper(choice) == 'Y');
 }
 
-lostAndFoundList() {
-
-	FILE* lostPtr;
-	Lost lost[MAXITEM];
-	int i = 0;
-	lostPtr = fopen("lost.bin", "ab+");
-
-	system("cls");
-	if (lostPtr == NULL) {
-		printf("Unable to open the file!\n");
-		exit(-1);
-	}
-	printf("LOST ITEM LIST\n");
-	printf("==============\n\n");
-	printf("%-14s%-30s  %-15s %-15s %-20s  %-12s\n", "LOST ITEM ID", "LOST ITEM", "LOST ITEM DATE", "LOST ITEM TIME", "LOST ITEM PLACE", "LOST STATUS");
-	printf("============  ==============================  ==============  ==============  ====================  ============\n");
-	while (fread(&lost[i], sizeof(Lost), 1, lostPtr) != 0) {
-		printf("%-14d%-30s  %02d/%02d/%-4d      %02d:%02d           %-20s  %-10s\n\n", lost[i].itemID, lost[i].description, lost[i].lostDate.day,
-			lost[i].lostDate.month, lost[i].lostDate.year, lost[i].lostTime.hours, lost[i].lostTime.minutes,
-			lost[i].lostPlace, "NOT FOUND");
-		i++;
-	}
-}
 
 removeItem() {
 
