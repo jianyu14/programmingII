@@ -376,9 +376,6 @@ void loginMemberAcc() {
 				system("cls");
 				printf("You are now logged out.\n\n");
 				break;
-			default:
-				printf("Invalid choice. Please enter a valid choice(1, 2, 3, 4).\n\n");
-				break;
 			}
 		} while (memSecondChoice != 4 && accountDeleted == false);
 
@@ -579,9 +576,6 @@ bool memberInformation(Members *member, bool accountDeleted) {
 			accountDeleted = deleteMemberInformation(&currentMem, &accountDeleted);
 			break;
 		case 6:
-			break;
-		default:
-			printf("Invalid choice. Please enter a valid choice(1, 2, 3, 4, 5, 6).\n\n");
 			break;
 		}
 	} while (memThirdChoice != 6 && accountDeleted == false);
@@ -833,9 +827,6 @@ void modifyMemberInformation(Members *mem) {
 			fclose(modifyMemPtr);
 			break;
 		case 3:
-			break;
-		default:
-			printf("Invalid choice. Please enter a valid choice(1, 2, 3).\n\n");
 			break;
 		}
 	} while (memFourthChoice != 3);
