@@ -1,18 +1,49 @@
 #include<stdio.h>
 #include<stdlib.h>
 #pragma warning(disable:4996)
+
 int getValidChoice(int lowerBound, int upperBound);
+staffMainMenu();
+
 void main(){
 
-  printf("LOGO");
-  
+  	printf("_________    ___    ___         ___       _________    ___     ___   ___    ___   ___            ___\n");
+	printf("|__   _|    |  |   |  |       /   \\      |_   __|   |  |    /  /   |  |   |  |  |  |          /   \\\n");
+	printf("  |   |      |  ||  |      /     \\       |   |     |  |/  /    |  |   |  |  |  |         /     \\\n");
+	printf("  |   |      |   ___   |     /       \\      |   |     |   ___  /     |  |   |  |  |  |        /       \\\n");
+	printf("  |   |      |  |   |  |    /   ___   \\   _|   |_   |  |   \\  \\    |  ||  |  |  |__    /   ___   \\\n");
+	printf("  ||      ||   ||   //   \\\\ ||  ||    \\\\   ||  ||  //   \\_\\\n\n");
+
+  int choice;
+	do {
+		system("cls");
+		printf("=============================================\n");
+		printf("WELCOME TO THAI KU LA TRAIN TICKETING SYSTEM!\n");
+		printf("=============================================\n\n");
+		printf("MAIN MENU\n\n");
+		printf("1. Staff Page\n");
+		printf("2. Member Page\n");
+		printf("3. Exit\n\n");
+		printf("Please select your choice: ");
+		choice = getValidChoice(1, 3);
+		system("cls");
+		switch (choice) {
+		case 1:
+			staffMainMenu();
+			break;
+		case 2:
+			memberMain();
+			break;
+		case 3:
+			break;
+		}
+	} while (choice != 3);
   
 }
 int getValidChoice(int lowerBound, int upperBound) {
 	char input[10];
 	int choice;
 	do {
-		
 		scanf("%s", input);	
 	
 		//convert the input to integer for choice
@@ -25,3 +56,35 @@ int getValidChoice(int lowerBound, int upperBound) {
 		}
 	} while (1);
 }
+
+staffMainMenu(){
+
+	system("cls");
+	printf("===========================\n");
+	printf("WELCOME TO STAFF MAIN MENU!\n");
+	printf("===========================\n\n");
+	printf("MAIN MENU\n\n");
+	printf("1. Staff Information\n");
+	printf("2. Train Scheduling\n");
+	printf("3. Booking Ticket\n\n");
+	printf("4. Return To Previous Page");
+	printf("Please select your choice: ");
+	choice = getValidChoice(1, 4);
+	system("cls");
+	switch (choice) {
+	case 1:
+		menuSatff();
+		break;
+	case 2:
+		tSchedulingStaffMenu();;
+		break;
+	case 3:
+		staffMenuBK();
+		break;
+	case 4:
+		main();
+	}
+
+};
+
+			

@@ -80,7 +80,7 @@ updateSalary();
 updateSatffInfo();
 updateStaInfo();
 
-void main() {
+void menuStaff() {
 
 	int select;
 

@@ -158,36 +158,6 @@ void userDisplayTrainList();
 void tSchedulingUserDisplay();
 
 
-//Main
-void main() {
-	int option;
-
-	system("cls");
-	do {
-		printf("1. Staff\n");
-		printf("2. User\n\n");
-		printf("Option: ");
-		scanf("%d", &option);
-
-		switch (option) {
-		case 1:
-			system("cls");
-			tSchedulingStaffMenu();
-			break;
-		case 2:
-			system("cls");
-			tSchedulingUserMenu();
-			break;
-		default:
-			option = chkInvalid(option);
-		}
-	} while (option == -1);
-
-	system("pause");
-
-}
-
-
 //Staff Menu
 void tSchedulingStaffMenu() {
 	int chooseFunction;

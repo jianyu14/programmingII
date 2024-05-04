@@ -81,33 +81,6 @@ void lostAndFoundList();
 bool deleteMemberInformation(Members* mem, bool isAccountDeleted);
 void memberMain();
 
-void main() {
-	int choice;
-	do {
-		system("cls");
-		printf("=======================\n");
-		printf("WELCOME TO TRAIN TICKETING SYSTEM!\n");
-		printf("=======================\n\n");
-		printf("MAIN MENU\n\n");
-		printf("1. Staff Page\n");
-		printf("2. Member Page\n");
-		printf("3. Exit\n\n");
-		printf("Please select your choice: ");
-		choice = getValidChoice(1, 3);
-		system("cls");
-		switch (choice) {
-		case 1:
-			staffMain();
-			break;
-		case 2:
-			memberMain();
-			break;
-		case 3:
-			break;
-		}
-	} while (choice != 3);
-}
-
 void memberMain() {
 	int memFirstChoice;
 
@@ -349,7 +322,7 @@ void loginMemberAcc() {
 				userMenuBK(&member[i]);
 				break;
 			case 2:
-				//ziqing
+				tSchedulingUserMenu();
 				break;
 			case 3:
 				accountDeleted = memberInformation(&member[loginArray], &accountDeleted);

@@ -96,14 +96,6 @@ void generateReport();
 void topMealR();
 void trainOccupancyRate();
 
-void main() {
-
-	Member members = { "ManMan",'F',"041130-06-0222","018-9107275","Ziqing1130@","Nishizhuzhu","M00001" };
-	staffMenuBK();
-	//userMenuBK(&members);
-	system("pause");
-}
-
 void userMenuBK(Member* member) {
 
 	int inp = 0;
