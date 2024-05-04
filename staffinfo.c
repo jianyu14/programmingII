@@ -1086,8 +1086,9 @@ staffFirstMenu() {
 		printf("2.Display Staff Information\n");
 		printf("3.Item Found!\n");
 		printf("4.Show the list\n");
-		printf("5.Remove item\n\n");
-		printf("6.Exit\n");
+		printf("5.Remove item\n");
+		printf("6.Remove Staff\n\n");
+		printf("7.Exit\n");
 		printf("Enter the number: ");
 		scanf("%d", &option);
 
