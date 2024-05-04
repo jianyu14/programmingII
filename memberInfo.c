@@ -590,7 +590,6 @@ bool memberInformation(Members *member, bool accountDeleted) {
 			break;
 		}
 	} while (memThirdChoice != 6 && accountDeleted == false);
-	system("cls");
 	return accountDeleted;
 }
 
