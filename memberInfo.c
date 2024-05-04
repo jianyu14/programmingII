@@ -35,7 +35,7 @@ typedef struct {
 }Meal;
 
 typedef struct {
-	char ticketID[10], psgName[100], psgIC[15], seatNo[4], coach, bookStatus[10], remarks[300];
+	char ticketID[10], psgName[100], psgIC[15], seatNo[4], coach, remarks[300];
 	Meal selectedMeal;
 	// psg = passenger
 }Ticket;
@@ -43,10 +43,9 @@ typedef struct {
 
 typedef struct {
 	//invoice
-	char invoiceNo[10], invTrnID[7];
+	char invoiceNo[10], invTrnID[7], memberID[7];
 	int ticketQtt;
 	double totalAmount;
-	char paymentInfo[20];
 	Date paymentDate;
 	Ticket ticBook[120];
 }Invoice;
@@ -190,6 +189,9 @@ void addMemberAcc() {
 	printf("Enter your name: ");
 	rewind(stdin);
 	scanf("%[^\n]", &temp.memberName);
+	for (int i = 0; temp.memberName[i] != '\0'; i++) {
+		temp.memberName[i] = toupper(temp.memberName[i]);
+	}
 	printf("Enter your gender (M/F): ");
 	scanf(" %c", &temp.memberGender);
 	temp.memberGender = toupper(temp.memberGender);
@@ -617,7 +619,7 @@ void searchMemberInformation(Members *mem) {
 		printf("Invalid choice. Please re-enter your choice (Y=Yes/N=No): ");
 		scanf(" %c", &choice);
 	}
-	
+	system("cls");
 	while (toupper(choice) == 'Y') {
 		system("cls");
 		printf("SEARCH BOOKING HISTORY\n\n");
@@ -625,22 +627,20 @@ void searchMemberInformation(Members *mem) {
 		rewind(stdin);
 		scanf("%s", &bookingID);
 
-		//need to refer invoice structure
-		//if the memberID is added, change the fscanf accordingly
-		while (fscanf(bookingPtr, "%[^|]|%[^|]|%d|%lf|%[^|]|%d/%d/%d\n",
-			booking.invoiceNo, booking.invTrnID, &booking.ticketQtt, &booking.totalAmount,
-			booking.paymentInfo, &booking.paymentDate.day, &booking.paymentDate.month, &booking.paymentDate.year) != EOF) {
+		while (fscanf(bookingPtr, "%[^|]|%[^|]|%[^|]|%d|%lf|%d/%d/%d\n",
+			booking.invoiceNo, booking.invTrnID, &booking.memberID, &booking.ticketQtt, &booking.totalAmount,
+			&booking.paymentDate.day, &booking.paymentDate.month, &booking.paymentDate.year) != EOF) {
 			quantity = booking.ticketQtt;
 			for (i = 0; i < quantity; i++) {
-				fscanf(bookingPtr, "%[^|]|%[^|]|%[^|]|%[^|]|%c|%[^|]|%[^\n]\n",
+				fscanf(bookingPtr, "%[^|]|%[^|]|%[^|]|%[^|]|%c|%[^\n]\n",
 					booking.ticBook[i].ticketID, booking.ticBook[i].psgName, booking.ticBook[i].psgIC, booking.ticBook[i].seatNo,
-					&booking.ticBook[i].coach, booking.ticBook[i].bookStatus, booking.ticBook[i].remarks);
+					&booking.ticBook[i].coach, booking.ticBook[i].remarks);
 
 				fscanf(bookingPtr, "%[^|]|%[^|]|%[^|]|%[^|]|%lf\n", booking.ticBook[i].selectedMeal.mealName,
 					booking.ticBook[i].selectedMeal.mainFood, booking.ticBook[i].selectedMeal.drinks,
 					booking.ticBook[i].selectedMeal.snacks, &booking.ticBook[i].selectedMeal.mealPrice);
 			}
-			if (strcmp(booking.invoiceNo, bookingID /*&& strcmp(booking.memberID, mem->memberID) == 0*/) == 0) {
+			if (strcmp(booking.invoiceNo, bookingID) == 0 && strcmp(booking.memberID, mem->memberID) == 0) {
 				found = 1;
 				break;
 			}
@@ -648,15 +648,15 @@ void searchMemberInformation(Members *mem) {
 
 		system("cls");
 		if (found == 1) {
-			printf("%s\t%s\t%s  \t%s     \t%s   \t%s\n", "BOOKING ID", "TRAIN ID", "TICKET QUANTITY", "PAYMENT", "PAYMENT METHOD", "PAYMENT DATE");
-			printf("==============\t==============\t======================\t=============\t======================\t===============\n");
-			printf("%s\t%-10s\t%-20d\tRM%.2lf\t%-20s\t%02d/%02d/%d\n\n", booking.invoiceNo, booking.invTrnID, booking.ticketQtt, booking.totalAmount,
-				booking.paymentInfo, booking.paymentDate.day, booking.paymentDate.month, booking.paymentDate.year);
-			printf("%s\t%s             \t%s\t%s\t%s\t%s\n", "TICKET ID", "PASSENGER NAME", "SEAT NO", "COACH", "BOOK STATUS", "REMARKS");
-			printf("==============\t==============================\t=======\t=====\t============\t==========================\n");
+			printf("%s\t%s\t%s  \t%s     \t%s\n", "BOOKING ID", "TRAIN ID", "TICKET QUANTITY", "PAYMENT", "PAYMENT DATE");
+			printf("==============\t==============\t======================\t=============\t===============\n");
+			printf("%s\t%-10s\t%-20d\tRM%.2lf\t%02d/%02d/%d\n\n", booking.invoiceNo, booking.invTrnID, booking.ticketQtt, booking.totalAmount,
+				booking.paymentDate.day, booking.paymentDate.month, booking.paymentDate.year);
+			printf("%s\t%s             \t%s\t%s\t%s\n", "TICKET ID", "PASSENGER NAME", "SEAT NO", "COACH", "REMARKS");
+			printf("==============\t==============================\t=======\t=====\t==========================\n");
 			for (i = 0; i < quantity; i++) {
-				printf("%s\t%-30s\t%s\t%-c\t%-12s\t%-20s\n", booking.ticBook[i].ticketID, booking.ticBook[i].psgName, booking.ticBook[i].seatNo,
-					booking.ticBook[i].coach, booking.ticBook[i].bookStatus, booking.ticBook[i].remarks);
+				printf("%s\t%-30s\t%s\t%-c\t%-20s\n", booking.ticBook[i].ticketID, booking.ticBook[i].psgName, booking.ticBook[i].seatNo,
+					booking.ticBook[i].coach, booking.ticBook[i].remarks);
 			}
 			printf("\n");
 			printf("%s\t%-20s\t%-20s\t%-20s\t%s\n", "MEAL NAME", "MAIN FOOD", "DRINKS", "SNACKS", "MEAL PRICE");
