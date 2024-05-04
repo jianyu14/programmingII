@@ -67,6 +67,7 @@ typedef struct {
 	Time foundTime;
 }Found;
 
+void staffMain();
 void memberFirstMenu();
 int getValidChoice(int lowerBound, int upperBound);
 void addMemberAcc();
@@ -86,6 +87,7 @@ void memberMain();
 void main() {
 	int choice;
 	do {
+		system("cls");
 		printf("=======================\n");
 		printf("WELCOME TO TRAIN TICKETING SYSTEM!\n");
 		printf("=======================\n\n");
@@ -95,9 +97,10 @@ void main() {
 		printf("3. Exit\n\n");
 		printf("Please select your choice: ");
 		choice = getValidChoice(1, 3);
+		system("cls");
 		switch (choice) {
 		case 1:
-			//staffMain();
+			staffMain();
 			break;
 		case 2:
 			memberMain();
@@ -115,7 +118,7 @@ void memberMain() {
 	int memFirstChoice;
 
 	do {
-		system("cls");
+		
 		memberFirstMenu();
 		memFirstChoice = getValidChoice(1, 4);
 		switch (memFirstChoice) {
@@ -129,13 +132,12 @@ void memberMain() {
 			forgetMemberPassword();
 			break;
 		case 4:
-			printf("Exiting...\n\n");
 			break;
 		default:
 			printf("Invalid choice. Please enter a valid choice(1, 2, 3, 4).\n\n");
 			break;
 		}
-		system("cls");
+		
 	} while (memFirstChoice != 4);
 	
 }
@@ -626,7 +628,6 @@ void searchMemberInformation(Members *mem) {
 
 		//need to refer invoice structure
 		//if the memberID is added, change the fscanf accordingly
-		//That's why still got error
 		while (fscanf(bookingPtr, "%[^|]|%[^|]|%d|%lf|%[^|]|%d/%d/%d\n",
 			booking.invoiceNo, booking.invTrnID, &booking.ticketQtt, &booking.totalAmount,
 			booking.paymentInfo, &booking.paymentDate.day, &booking.paymentDate.month, &booking.paymentDate.year) != EOF) {
@@ -640,7 +641,7 @@ void searchMemberInformation(Members *mem) {
 					booking.ticBook[i].selectedMeal.mainFood, booking.ticBook[i].selectedMeal.drinks,
 					booking.ticBook[i].selectedMeal.snacks, &booking.ticBook[i].selectedMeal.mealPrice);
 			}
-			if (strcmp(booking.invoiceNo, bookingID) == 0 && strcmp(booking.memberID, mem->memberID) == 0) {
+			if (strcmp(booking.invoiceNo, bookingID /*&& strcmp(booking.memberID, mem->memberID) == 0*/) == 0) {
 				found = 1;
 				break;
 			}
