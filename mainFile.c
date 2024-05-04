@@ -58,7 +58,7 @@ int getValidChoice(int lowerBound, int upperBound) {
 }
 
 staffMainMenu(){
-
+	int choice;
 	system("cls");
 	printf("===========================\n");
 	printf("WELCOME TO STAFF MAIN MENU!\n");
