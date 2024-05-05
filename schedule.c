@@ -2950,6 +2950,55 @@ void deleteTrainSchedule() {
 	}
 	count -= 1;
 
+
+
+	int  seatIndex = 0,editInd;
+	SeatDisplay* seatTable = (SeatDisplay*)malloc(5000 * sizeof(SeatDisplay));
+
+	FILE* seat = fopen("seatList.txt", "r");
+	if (!seat) {
+		printf("Error: Cannot open seatList.txt!!\n");
+		exit(-1);
+	}
+	else {
+		while (fscanf(seat, "%[^\n]\n", seatTable[seatIndex].schNo) != EOF) {
+			for (int y = 0; y < 119; y++) {
+				fscanf(seat, "%[^|]|%c\n", &seatTable[seatIndex].seat[y].seatNo, &seatTable[seatIndex].seat[y].status);
+			}
+			fscanf(seat, "%[^|]|%c\n\n\n", &seatTable[seatIndex].seat[119].seatNo, &seatTable[seatIndex].seat[119].status);
+			seatIndex++;
+		}
+		fclose(seat);
+		for(int az=0;az<seatIndex;az++){
+			if (strcmp(scheduleNo, seatTable[seatIndex].schNo) == 0) {
+				editInd = az;
+			}
+		}
+		for (int b = editInd; b < seatIndex; b++) {
+			seatTable[editInd] = seatTable[editInd + 1];
+		}
+		seatIndex -= 1;
+
+		FILE* seat = fopen("seatList.txt", "w");
+		if (!seat) {
+			printf("Error: Cannot open seatList.txt!!\n");
+			exit(-1);
+		}
+		else {
+			for(int ay = 0;ay<seatIndex;ay++){
+				fprintf(seat, "%s\n", seatTable[ay].schNo);
+				for (int y = 0; y < 119; y++) {
+					fscanf(seat, "%s|%c\n", &seatTable[ay].seat[y].seatNo, &seatTable[ay].seat[y].status);
+				}
+				fscanf(seat, "%s|%c\n\n\n", &seatTable[ay].seat[119].seatNo, &seatTable[ay].seat[119].status);
+			}
+			
+		}
+		fclose(seat);
+		free(seatTable);
+			
+	}
+
 	FILE* wTrnSch = fopen("trainSchedule.txt", "w");
 	if (wTrnSch == NULL) {
 		printf("Error: Cannot open trainSchedule.txt!!\n");
