@@ -16,7 +16,7 @@ void main() {
 
 	int choice;
 	do {
-		
+		system("cls");
 		printf("=============================================\n");
 		printf("WELCOME TO THAI KU LA TRAIN TICKETING SYSTEM!\n");
 		printf("=============================================\n\n");
@@ -26,7 +26,7 @@ void main() {
 		printf("3. Exit\n\n");
 		printf("Please select your choice: ");
 		choice = getValidChoice(1, 3);
-		
+		system("cls");
 		switch (choice) {
 		case 1:
 			staffMainMenu();
@@ -59,30 +59,31 @@ int getValidChoice(int lowerBound, int upperBound) {
 
 staffMainMenu() {
 	int choice;
-	system("cls");
-	printf("===========================\n");
-	printf("WELCOME TO STAFF MAIN MENU!\n");
-	printf("===========================\n\n");
-	printf("MAIN MENU\n\n");
-	printf("1. Staff Information\n");
-	printf("2. Train Scheduling\n");
-	printf("3. Booking Ticket\n\n");
-	printf("4. Return To Previous Page");
-	printf("Please select your choice: ");
-	choice = getValidChoice(1, 4);
-	system("cls");
-	switch (choice) {
-	case 1:
-		menuStaff();
-		break;
-	case 2:
-		tSchedulingStaffMenu();;
-		break;
-	case 3:
-		staffMenuBK();
-		break;
-	case 4:
-		main();
-	}
-
+	do {
+		system("cls");
+		printf("===========================\n");
+		printf("WELCOME TO STAFF MAIN MENU!\n");
+		printf("===========================\n\n");
+		printf("MAIN MENU\n\n");
+		printf("1. Staff Information\n");
+		printf("2. Train Scheduling\n");
+		printf("3. Booking Ticket\n");
+		printf("4. Return To Previous Page\n\n");
+		printf("Please select your choice: ");
+		choice = getValidChoice(1, 4);
+		system("cls");
+		switch (choice) {
+		case 1:
+			menuStaff();
+			break;
+		case 2:
+			tSchedulingStaffMenu();;
+			break;
+		case 3:
+			staffMenuBK();
+			break;
+		case 4:
+			break;
+		}
+	} while (choice != 4);
 };
