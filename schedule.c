@@ -587,9 +587,12 @@ void staffDisplaySeatList() {
 
 		system("cls");
 		fseek(seat, SEEK_SET, 0);
-		while (fscanf(seat, "%[^\n]\n", seatTable.schNo) != EOF) {
+		while (fscanf(seat, "%[^\n]\n", &seatTable.schNo) != EOF) {
 			for (int y = 0; y < 120; y++) {
-				fscanf(seat, "%[^|]|%c\n", &seatTable.seat[y].seatNo, &seatTable.seat[y].status);
+				if (y != 119)
+					fscanf(seat, "%[^|]|%c\n", &seatTable.seat[y].seatNo, &seatTable.seat[y].status);
+				else
+					fscanf(seat, "%[^|]|%c\n", &seatTable.seat[y].seatNo, &seatTable.seat[y].status);
 			}
 			if (strcmp(inp, seatTable.schNo) == 0) {
 				printf("********************************* Seat List for [ %s ]**************************************\n\n", seatTable.schNo);
@@ -613,7 +616,7 @@ void staffDisplaySeatList() {
 					printf("\n");
 					index = t + 4;
 				}
-				printf("\n******************************************************************************************\n\n");
+				printf("\n**********************************************************************************************\n\n");
 
 				printf("[ ] = Available\t{ } = Booked\n");
 			}
@@ -4336,12 +4339,15 @@ void userDisplaySeatList() {
 					printf("\n");
 					index = t + 4;
 				}
-				printf("\n******************************************************************************************\n\n");
+				printf("\n**********************************************************************************************\n\n");
 
 				printf("[ ] = Available\t{ } = Booked\n");
 			}
 
 		}
+
+
+
 		printf("\nDo you want to see other lists? ( Y = Yes / Other = Exit to menu page ): ");
 		rewind(stdin);
 		scanf("%c", &ans);
@@ -4353,6 +4359,8 @@ void userDisplaySeatList() {
 		else {
 			tSchedulingUserMenu();
 		}
+
+		fclose(seat);
 	}
 
 }
