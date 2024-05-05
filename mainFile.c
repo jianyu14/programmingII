@@ -5,18 +5,18 @@
 int getValidChoice(int lowerBound, int upperBound);
 staffMainMenu();
 
-void main(){
-
-  	printf("_________    ___    ___         ___       _________    ___     ___   ___    ___   ___            ___\n");
+void main() {
+	system("cls");
+	printf("_________    ___    ___         ___       _________    ___     ___   ___    ___   ___            ___\n");
 	printf("|__   __|    |  |   |  |       /   \\      |__   __|   |  |    /  /   |  |   |  |  |  |          /   \\\n");
 	printf("  |   |      |  |___|  |      /     \\       |   |     |  |___/  /    |  |   |  |  |  |         /     \\\n");
 	printf("  |   |      |   ___   |     /       \\      |   |     |   ___  /     |  |   |  |  |  |        /       \\\n");
 	printf("  |   |      |  |   |  |    /   ___   \\   __|   |__   |  |   \\  \\    |  |___|  |  |  |___    /   ___   \\\n");
 	printf("  |___|      |__|   |__|   /___/   \\___\\ |_________|  |__|    \\__\\   |_________|  |______|  /___/   \\___\\\n\n");
 
-  int choice;
+	int choice;
 	do {
-		system("cls");
+		
 		printf("=============================================\n");
 		printf("WELCOME TO THAI KU LA TRAIN TICKETING SYSTEM!\n");
 		printf("=============================================\n\n");
@@ -26,7 +26,7 @@ void main(){
 		printf("3. Exit\n\n");
 		printf("Please select your choice: ");
 		choice = getValidChoice(1, 3);
-		system("cls");
+		
 		switch (choice) {
 		case 1:
 			staffMainMenu();
@@ -38,14 +38,14 @@ void main(){
 			break;
 		}
 	} while (choice != 3);
-  
+
 }
 int getValidChoice(int lowerBound, int upperBound) {
 	char input[10];
 	int choice;
 	do {
-		scanf("%s", input);	
-	
+		scanf("%s", input);
+
 		//convert the input to integer for choice
 		choice = atoi(input);
 		if (choice < lowerBound || choice > upperBound) {
@@ -57,7 +57,7 @@ int getValidChoice(int lowerBound, int upperBound) {
 	} while (1);
 }
 
-staffMainMenu(){
+staffMainMenu() {
 	int choice;
 	system("cls");
 	printf("===========================\n");
@@ -73,7 +73,7 @@ staffMainMenu(){
 	system("cls");
 	switch (choice) {
 	case 1:
-		menuSatff();
+		menuStaff();
 		break;
 	case 2:
 		tSchedulingStaffMenu();;
@@ -86,5 +86,3 @@ staffMainMenu(){
 	}
 
 };
-
-			
