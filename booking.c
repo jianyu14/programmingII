@@ -7,16 +7,23 @@
 #pragma warning(disable:4996)
 
 typedef struct {
-	char name[50], gender, mbIC[15], contact[13], mbPW[30], mbPassphrase[30], mbID[7];
-}Member;
-
-typedef struct {
 	int day, month, year;
 }Date;
 
 typedef struct {
 	int hours, minutes;
 }Time;
+
+typedef struct {
+	char memberName[30];
+	char memberGender;
+	char memberIC[13];
+	char memberContact[12];
+	Date dateJoined[11];
+	char memberPassword[30];
+	char memberPassphrase[30];
+	char memberID[7];
+}Member;
 
 typedef struct {
 	char mealName[7], mainFood[100], drinks[100], snacks[100];
@@ -197,7 +204,7 @@ void editPreBooking(Member* member) {
 	char ans, ans1, tkID[10];
 	Invoice preBooking;
 
-	Invoice* bookingSet = (Invoice*)malloc(5000 * sizeof(Invoice));
+	Invoice* bookingSet = (Invoice*)malloc(1000 * sizeof(Invoice));
 	if (bookingSet == NULL) {
 		printf("Failed to allocate memory to booked structure!\n");
 	}
@@ -303,6 +310,15 @@ void editPreBooking(Member* member) {
 		}
 	} while (inp == -1);
 
+	if (bookingSet[indexEdited].ticketQtt == 0) {
+
+		for (int af = indexEdited;af < h;af++) {
+			bookingSet[af] = bookingSet[af + 1];
+		}
+
+		h -= 1;
+	}
+
 	// write the data that already edit into file
 
 	FILE* bkFileW = fopen("bookingTic.txt", "w");
@@ -372,7 +388,7 @@ void viewPreBooking(Member* member) {
 					booked.ticBook[j].selectedMeal.mealName, booked.ticBook[j].selectedMeal.mainFood,
 					booked.ticBook[j].selectedMeal.drinks, booked.ticBook[j].selectedMeal.snacks, &booked.ticBook[j].selectedMeal.mealPrice);
 			}
-			if (strcmp(member->mbID, booked.membID) == 0) {
+			if (strcmp(member->memberID, booked.membID) == 0) {
 				bookingSet[h] = booked;
 				h++;
 			}
@@ -747,7 +763,7 @@ void bookingTicket(TrainSchedule* schedule, Member* member) {
 	double totalBK = 0;
 	int countIV = 0, countBK = 0, lastTicID, indexSch, condition = 1, condi = 1;
 
-	Invoice* booked = (Invoice*)malloc(5000 * sizeof(Invoice));
+	Invoice* booked = (Invoice*)malloc(1000 * sizeof(Invoice));
 	if (booked == NULL) {
 		printf("Failed to allocate memory to booked structure!\n");
 	}
@@ -763,7 +779,7 @@ void bookingTicket(TrainSchedule* schedule, Member* member) {
 			printf("\nEnter the seat quantity => ");
 			scanf("%d", &invoices.ticketQtt);
 
-			if (isdigit(invoices.ticketQtt) == 0)
+			if (isdigit(invoices.ticketQtt) != 0)
 				condi = invalid(condi);
 		} while (condi == -1);
 
@@ -814,8 +830,10 @@ void bookingTicket(TrainSchedule* schedule, Member* member) {
 				for (int ac = 0;ac < countt;ac++) {
 					fprintf(seatFile, "%s\n", seatTB[ac].schNo);
 					for (int ad = 0;ad < 119;ad++) {
-						fprintf(seatFile, "%s|%c", seatTB[ac].seat[ad].seatNo, seatTB[ac].seat[ad].status);
+						fprintf(seatFile, "%s|%c\n", seatTB[ac].seat[ad].seatNo, seatTB[ac].seat[ad].status);
 					}
+					fprintf(seatFile, "%s|%c\n\n\n", seatTB[ac].seat[119].seatNo, seatTB[ac].seat[119].status);
+
 				}
 			}
 			fclose(seatFile);
@@ -827,6 +845,7 @@ void bookingTicket(TrainSchedule* schedule, Member* member) {
 			lowerToUpper(invoices.ticBook[i].psgName, funcArrayLength(invoices.ticBook[i].psgName));
 
 			do {
+				condition = 0;
 				printf("\nEnter passenger IC number [ XXXXXX-XX-XXXX ]=>");
 				rewind(stdin);
 				scanf("%s", invoices.ticBook[i].psgIC);
@@ -896,7 +915,7 @@ void bookingTicket(TrainSchedule* schedule, Member* member) {
 			}
 
 			sprintf(invoices.invoiceNo, "IV-%06d", atoi(booked[countIV - 1].invoiceNo + 3) + 1); // assign invoice number
-			strcpy(invoices.membID, member->mbID); // assign member id
+			strcpy(invoices.membID, member->memberID); // assign member id
 			lastTicID = atoi(booked[countIV - 1].ticBook[countBK - 1].ticketID + 3);
 
 			//assign ticket id and coach
@@ -968,7 +987,7 @@ void printInvoice(TrainSchedule* schedule, Member* member, Invoice* invoices) {
 	printf("\n\n============================================== Invoice ==============================================\n\n");
 	printf("Invoice NO. : %s\n", invoices->invoiceNo);
 	printf("Schedule NO. : %s \t Train ID: %s\n", invoices->invSchNo, schedule->trainID);
-	printf("Member ID : %s \t Member Name: %s\n", invoices->membID, member->name);
+	printf("Member ID : %s \t Member Name: %s\n", invoices->membID, member->memberName);
 	printf("Number of Seat : %d\n\n", invoices->ticketQtt);
 	printf("%-11s%-25s%-18s%-8s%-7s%-13s%-10s\n", "Ticket ID", "Name", "Passenger IC", "Seat", "Coach", "Meal Name", "Subtotal");
 	printf("%-11s%-25s%-18s%-8s%-7s%-13s%-10s\n", "*********", "****", "************", "****", "*****", "*********", "********");
@@ -995,7 +1014,7 @@ Invoice editMeal(Invoice* preBK, int ticInd) {
 	TrainSchedule schedule;
 	char inpChangeM, newMeal[7];
 	int cond;
-	double refundAddAmt;
+	double refundAddAmt, diffP;
 	system("cls");
 	displayEditTicket(preBK, ticInd);
 	printf("Do you sure you want to change your meal? [ Y = YES || other character = NO ] => ");
@@ -1055,16 +1074,21 @@ Invoice editMeal(Invoice* preBK, int ticInd) {
 
 							refundAddAmt = schedule.mealList[o].mealPrice - preBK->ticBook[ticInd].selectedMeal.mealPrice;
 							refundAddAmt = round(refundAddAmt * 100) / 100; // Round to two decimal places
-							printf("\n\nDifferent of the previous meal price and the new meal price is => RM%.2lf", refundAddAmt);
+
+							printf("\n\nDifferent between the previous meal price and the new meal price is => RM%.2lf", refundAddAmt);
 
 							if (payByCreditCard(refundAddAmt) != 1) {
 								refundAddAmt = invalid(refundAddAmt);
+							}
+							else {
+								diffP = preBK->totalAmount + (round(schedule.mealList[o].mealPrice - preBK->ticBook[ticInd].selectedMeal.mealPrice) * 100 / 100);
 							}
 
 						}
 						else {
 							printf("\nThe difference of the price already credit into your bank!\n");
 							refundAddAmt = 1;
+							diffP = preBK->totalAmount - preBK->ticBook[ticInd].selectedMeal.mealPrice + schedule.mealList[o].mealPrice;
 						}
 						if (refundAddAmt != -1) {
 							strcpy(preBK->ticBook[ticInd].selectedMeal.mealName, schedule.mealList[o].mealName);
@@ -1072,6 +1096,7 @@ Invoice editMeal(Invoice* preBK, int ticInd) {
 							strcpy(preBK->ticBook[ticInd].selectedMeal.drinks, schedule.mealList[o].drinks);
 							strcpy(preBK->ticBook[ticInd].selectedMeal.snacks, schedule.mealList[o].snacks);
 							preBK->ticBook[ticInd].selectedMeal.mealPrice = schedule.mealList[o].mealPrice;
+							preBK->totalAmount = diffP;
 						}
 						cond = 1;
 					}
@@ -1090,9 +1115,9 @@ Invoice editMeal(Invoice* preBK, int ticInd) {
 }
 Invoice changeSeat(Invoice* preBK, int ticInd) {
 
-	SeatDisplay seatSet[1000];
+	SeatDisplay* seatSet = (SeatDisplay*)malloc(1000 * sizeof(SeatDisplay));
 	char inpChangeS, newSeat[4], rSchID[6];
-	int cond, seatIndex = 0, indexEdited, count = 0;
+	int cond = 0, seatIndex = 0, indexEdited, count = 0, originalSeat;
 
 	displayEditTicket(preBK, ticInd);
 	printf("Do you sure you want to change your seat? [ Y = YES || other character = NO ] => ");
@@ -1102,13 +1127,13 @@ Invoice changeSeat(Invoice* preBK, int ticInd) {
 
 	if (inpChangeS == 'Y') {
 
-		FILE* changeS = fopen("seatList1.txt", "w");
+		FILE* changeS = fopen("seatList.txt", "r");
 		if (changeS == NULL) {
 			printf("Error for open seatList.txt!\n");
 			exit(-1);
 		}
 		else {
-			while (fscanf(changeS, "%[^\n]\n", rSchID) != EOF) {
+			while (fscanf(changeS, "%[^\n]\n", seatSet[seatIndex].schNo) != EOF) {
 
 				for (int s = 0;s < 120;s++) {
 					if (s != 119)
@@ -1116,14 +1141,16 @@ Invoice changeSeat(Invoice* preBK, int ticInd) {
 					else
 						fscanf(changeS, "%[^|]|%c\n\n\n", seatSet[seatIndex].seat[s].seatNo, &seatSet[seatIndex].seat[s].status);
 				}
-				if (strcmp(rSchID, preBK->invSchNo) == 0) {
+				if (strcmp(seatSet[seatIndex].schNo, preBK->invSchNo) == 0) {
 					indexEdited = seatIndex;
 				}
 				count++;
+				seatIndex++;
 			}
+			fclose(changeS);
 
 			do {
-				displaySeat(&seatSet[seatIndex]);
+				displaySeat(&seatSet[indexEdited]);
 				printf("\n\nEnter new seat number [ XXX = return to previous page ]=> ");
 				rewind(stdin);
 				scanf("%s", newSeat);
@@ -1131,13 +1158,21 @@ Invoice changeSeat(Invoice* preBK, int ticInd) {
 
 				if (strcmp(newSeat, "XXX") != 0) {
 
+					for (int ag = 0;ag < 120;ag++) {
+						if (strcmp(preBK->ticBook[ticInd].seatNo, seatSet[indexEdited].seat[ag].seatNo) == 0) {
+							originalSeat = ag;
+						}
+					}
+
 					for (int v = 0;v < 120;v++) {
-						if (strcmp(newSeat, seatSet[seatIndex].seat[v].seatNo) == 0) {
-							if (seatSet[seatIndex].seat[v].status == 'A') {
+						if (strcmp(newSeat, seatSet[indexEdited].seat[v].seatNo) == 0) {
+							if (seatSet[indexEdited].seat[v].status == 'A') {
 								strcpy(preBK->ticBook[ticInd].seatNo, newSeat);
 								preBK->ticBook[ticInd].coach = preBK->ticBook[ticInd].seatNo[0];
 								printf("\n\n*********************** Successfully update your Ticket Details. ***********************\n");
-								seatSet[seatIndex].seat[v].status = 'B';
+								seatSet[indexEdited].seat[v].status = 'B';
+								seatSet[indexEdited].seat[originalSeat].status = 'A';
+
 							}
 							else {
 								printf("\nThis seat is already booked! Please choose again! \n");
@@ -1149,14 +1184,26 @@ Invoice changeSeat(Invoice* preBK, int ticInd) {
 
 			} while (cond == -1 && (strcmp(newSeat, "XXX") != 0));
 
-			for (int w = 0;w < count;w++) {
+			FILE* changeS = fopen("seatList.txt", "w");
+			if (changeS == NULL) {
+				printf("Error for open seatList.txt!\n");
+				exit(-1);
+			}
+			else {
+				for (int w = 0;w < count;w++) {
 
-				fprintf(changeS, "%s\n", seatSet[w].schNo);
-				for (int x = 0; x < 120;x++) {
-					fprintf(changeS, "%s|%c\n", seatSet[w].seat[x].seatNo, seatSet[w].seat[x].status);
+					fprintf(changeS, "%s\n", seatSet[w].schNo);
+					for (int x = 0; x < 120;x++) {
+						if (x != 119)
+							fprintf(changeS, "%s|%c\n", seatSet[w].seat[x].seatNo, seatSet[w].seat[x].status);
+						else
+							fprintf(changeS, "%s|%c\n\n\n", seatSet[w].seat[x].seatNo, seatSet[w].seat[x].status);
+					}
 				}
 			}
+
 			fclose(changeS);
+			free(seatSet);
 		}
 		return *preBK;
 	}
@@ -1164,6 +1211,8 @@ Invoice changeSeat(Invoice* preBK, int ticInd) {
 Invoice cancelTicket(Invoice* preBK, int ticInd) {
 
 	char inpCancel;
+	int count = 0, seatIndex = 0, indexEdited;
+	SeatDisplay* seatSet = (SeatDisplay*)malloc(1000 * sizeof(SeatDisplay));
 	displayEditTicket(preBK, ticInd);
 	printf("Do you sure you want to cancel? [ Y = YES || other character = NO ] => ");
 	rewind(stdin);
@@ -1176,7 +1225,60 @@ Invoice cancelTicket(Invoice* preBK, int ticInd) {
 			preBK->ticBook[n] = preBK->ticBook[n + 1];
 		}
 		preBK->ticketQtt = preBK->ticketQtt - 1;
-		printf("\n\n*********************** Successfully update your Ticket Details. ***********************\n");
+
+		FILE* changeS = fopen("seatList.txt", "r");
+		if (changeS == NULL) {
+			printf("Error for open seatList.txt!\n");
+			exit(-1);
+		}
+		else {
+			while (fscanf(changeS, "%[^\n]\n", seatSet[seatIndex].schNo) != EOF) {
+
+				for (int s = 0;s < 120;s++) {
+					if (s != 119)
+						fscanf(changeS, "%[^|]|%c\n", seatSet[seatIndex].seat[s].seatNo, &seatSet[seatIndex].seat[s].status);
+					else
+						fscanf(changeS, "%[^|]|%c\n\n\n", seatSet[seatIndex].seat[s].seatNo, &seatSet[seatIndex].seat[s].status);
+				}
+				if (strcmp(seatSet[seatIndex].schNo, preBK->invSchNo) == 0) {
+					indexEdited = seatIndex;
+				}
+				count++;
+				seatIndex++;
+			}
+			fclose(changeS);
+
+			for (int ah = 0;ah < count;ah++) {
+				for (int ai = 0;ai < 120;ai++) {
+					if (strcmp(preBK->ticBook[ticInd].seatNo, seatSet[ah].seat[ai].seatNo) == 0) {
+						seatSet[ah].seat[ai].status = 'A';
+					}
+				}
+
+			}
+
+			FILE* changeS = fopen("seatList.txt", "w");
+			if (changeS == NULL) {
+				printf("Error for open seatList.txt!\n");
+				exit(-1);
+			}
+			else {
+				for (int w = 0;w < count;w++) {
+
+					fprintf(changeS, "%s\n", seatSet[w].schNo);
+					for (int x = 0; x < 120;x++) {
+						if (x != 119)
+							fprintf(changeS, "%s|%c\n", seatSet[w].seat[x].seatNo, seatSet[w].seat[x].status);
+						else
+							fprintf(changeS, "%s|%c\n\n\n", seatSet[w].seat[x].seatNo, seatSet[w].seat[x].status);
+					}
+				}
+			}
+			fclose(changeS);
+			free(seatSet);
+
+			printf("\n\n*********************** Successfully update your Ticket Details. ***********************\n");
+		}
 	}
 	return *preBK;
 }
