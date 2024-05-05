@@ -547,16 +547,11 @@ void searchMemberInformation(Members* mem) {
 	char bookingID[10];
 	int i = 0;
 	int quantity;
-	int found = 0;
+	int found;
 	FILE* bookingPtr;
-	bookingPtr = fopen("bookingTic.txt", "r");
-
+	
 	system("cls");
-	if (bookingPtr == NULL) {
-		printf("Unable to open the file...\n\n");
-		exit(-1);
-	}
-
+	
 	printf("SEARCH BOOKING HISTORY\n");
 	printf("======================\n\n");
 	printf("Do you want to search your booking history? (Y=Yes/N=No): ");
@@ -568,12 +563,22 @@ void searchMemberInformation(Members* mem) {
 	}
 	system("cls");
 	while (toupper(choice) == 'Y') {
+		found = 0;
 		system("cls");
 		printf("SEARCH BOOKING HISTORY\n");
 		printf("======================\n\n");
 		printf("Enter your booking ID to search: ");
 		rewind(stdin);
 		scanf("%s", &bookingID);
+
+		bookingPtr = fopen("bookingTic.txt", "r");
+
+		system("cls");
+
+		if (bookingPtr == NULL) {
+			printf("Unable to open the file...\n\n");
+			exit(-1);
+		}
 
 		while (fscanf(bookingPtr, "%[^|]|%[^|]|%[^|]|%d|%lf|%d/%d/%d\n",
 			booking.invoiceNo, booking.invTrnID, &booking.memberID, &booking.ticketQtt, &booking.totalAmount,
@@ -594,7 +599,8 @@ void searchMemberInformation(Members* mem) {
 			}
 		}
 
-		system("cls");
+		fclose(bookingPtr);
+
 		if (found == 1) {
 			printf("%s\t%s\t%s  \t%s     \t%s\n", "BOOKING ID", "TRAIN ID", "TICKET QUANTITY", "PAYMENT", "PAYMENT DATE");
 			printf("==============\t==============\t======================\t=============\t===============\n");
@@ -629,7 +635,6 @@ void searchMemberInformation(Members* mem) {
 		}
 		system("cls");
 	}
-	fclose(bookingPtr);
 }
 
 void modifyMemberInformation(Members* mem) {
