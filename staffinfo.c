@@ -59,10 +59,10 @@ typedef struct {
 }Staff;
 
 addStaff();
-displayStaffList();
+staffdisplayStaffList();
 forgatPassword();
 foundItem();
-genegrateReport();
+genegrateReportSatff();
 loginManager();
 loginStaff();
 lostAndFoundList();
@@ -473,8 +473,8 @@ loginStaff() {
 		fclose(staff);
 	}
 }
-	
-displayStaffList() {
+
+staffdisplayStaffList() {
 
 	FILE* staff;
 	Staff sta[MAXSTAFF];
@@ -509,8 +509,6 @@ displayStaffList() {
 	system("pause");
 }
 
-	
-
 forgetPassword() {
 
 	FILE* staff;
@@ -523,7 +521,7 @@ forgetPassword() {
 
 	staff = fopen("staff.bin", "rb");
 	tempFile = fopen("temp.bin", "wb");
-	
+
 	system("cls");
 	if (staff == NULL) {
 		printf("Unable to open the file!\n");
@@ -584,7 +582,7 @@ updateSalary() {
 
 	staff = fopen("staff.bin", "rb+");
 	tempFile = fopen("temp.bin", "wb");
-	
+
 	system("cls");
 	if (staff == NULL || tempFile == NULL) {
 		printf("Unable to open files!\n");
@@ -647,7 +645,7 @@ updatePosition() {
 				printf("Current position of %s: %s\n", sta.name, sta.position);
 				printf("Enter the new position: ");
 				scanf("%s", &newPosition);
-				strcpy(sta.position,newPosition);
+				strcpy(sta.position, newPosition);
 			}
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
 		}
@@ -919,7 +917,7 @@ removeStaff() {
 	system("pause");
 }
 
-generateReport() {
+generateReportStaff() {
 
 	FILE* staff;
 	Staff sta;
@@ -967,7 +965,7 @@ generateReport() {
 }
 
 managerSecondMenu() {
-	
+
 	int ans2;
 
 	system("cls");
@@ -1037,7 +1035,7 @@ managerFirstMenu() {
 		switch (option) {
 
 		case 1:
-			addStaff();
+			addstaff();
 			break;
 
 		case 2:
@@ -1053,11 +1051,11 @@ managerFirstMenu() {
 			break;
 
 		case 5:
-			generateReport();
+			removeStaff();
 			break;
 
 		case 6:
-			removeStaff();
+			generateReportStaff();
 			break;
 
 		case 7:
@@ -1099,7 +1097,7 @@ staffFirstMenu() {
 			break;
 
 		case 2:
-			searchStaff(sta,MAXSTAFF);
+			staffdisplayStaffList();
 			break;
 
 		case 3:
