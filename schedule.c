@@ -561,8 +561,8 @@ void staffDisplayDriverList() {
 
 void staffDisplaySeatList() {
 
-	int  index = 0;
-	char ans;
+	int  index = 0, frmt;
+	char ans, inp[6];
 	SeatDisplay seatTable;
 
 	FILE* seat = fopen("seatList.txt", "r");
@@ -571,35 +571,56 @@ void staffDisplaySeatList() {
 		exit(-1);
 	}
 	else {
+		do {
+			frmt = 0;
+			printf("Which train schedule's seat list you want to display?\n");
+			printf("Enter the Schedule No: ");
+			rewind(stdin);
+			scanf("%s", &inp);
+			lowerToUpper(inp, funcArrayLength(inp));
+			frmt = chkScheduleFormat(inp);
+
+			if (frmt != 1) {
+				frmt = chkInvalid(frmt);
+			}
+		} while (frmt == -1);
+
+		system("cls");
+		fseek(seat, SEEK_SET, 0);
 		while (fscanf(seat, "%[^\n]\n", seatTable.schNo) != EOF) {
 			for (int y = 0; y < 120; y++) {
 				fscanf(seat, "%[^|]|%c\n", &seatTable.seat[y].seatNo, &seatTable.seat[y].status);
 			}
-		}
+			if (strcmp(inp, seatTable.schNo) == 0) {
+				printf("********************************* Seat List for [ %s ]**************************************\n\n", seatTable.schNo);
 
-		printf("********************************* Full Seat List **************************************\n\n");
-		for (int t = 0; t < 40; t += 4) {
-			for (int u = 0; u < 3; u++) {
-				for (int v = 0; v < 4; v++) {
+				for (int t = 0; t < 40; t += 4) {
+					for (int u = 0; u < 3; u++) {
+						for (int v = 0; v < 4; v++) {
 
-					if (seatTable.seat[index].status == 'A')
-						printf("[%s]", seatTable.seat[index].seatNo);
-					else
-						printf("{%s}", seatTable.seat[index].seatNo);
+							if (seatTable.seat[index].status == 'A')
+								printf("[%s]", seatTable.seat[index].seatNo);
+							else
+								printf("{%s}", seatTable.seat[index].seatNo);
 
-					if (v == 1)
-						printf("--");
-					index++;
+							if (v == 1)
+								printf("--");
+							index++;
+						}
+						printf("\t\t");
+						index += 36;
+					}
+					printf("\n");
+					index = t + 4;
 				}
-				printf("\t\t");
-				index += 36;
-			}
-			printf("\n");
-			index = t + 4;
-		}
-		printf("\n***************************************************************************************\n\n");
+				printf("\n******************************************************************************************\n\n");
 
-		printf("[ ] = Available\t{ } = Booked\n");
+				printf("[ ] = Available\t{ } = Booked\n");
+			}
+
+		}
+
+
 
 		printf("\nDo you want to see other lists? ( Y = Yes / Other = Exit to menu page ): ");
 		rewind(stdin);
@@ -4248,8 +4269,8 @@ void userDisplayTrainList() {
 
 void userDisplaySeatList() {
 
-	int  index = 0;
-	char ans;
+	int  index = 0, frmt;
+	char ans, inp[6];
 	SeatDisplay seatTable;
 
 	FILE* seat = fopen("seatList.txt", "r");
@@ -4258,36 +4279,54 @@ void userDisplaySeatList() {
 		exit(-1);
 	}
 	else {
+		do {
+			frmt = 0;
+			printf("Which train schedule's seat list you want to display?\n");
+			printf("Enter the Schedule No: ");
+			rewind(stdin);
+			scanf("%s", &inp);
+			lowerToUpper(inp, funcArrayLength(inp));
+			frmt = chkScheduleFormat(inp);
+
+			if (frmt != 1) {
+				frmt = chkInvalid(frmt);
+			}
+		} while (frmt == -1);
+
+		system("cls");
+		fseek(seat, SEEK_SET, 0);
 		while (fscanf(seat, "%[^\n]\n", seatTable.schNo) != EOF) {
 			for (int y = 0; y < 120; y++) {
 				fscanf(seat, "%[^|]|%c\n", &seatTable.seat[y].seatNo, &seatTable.seat[y].status);
 			}
-		}
+			if (strcmp(inp, seatTable.schNo) == 0) {
+				printf("********************************* Seat List for [ %s ]**************************************\n\n", seatTable.schNo);
 
-		printf("********************************* Full Seat List **************************************\n\n");
-		for (int t = 0; t < 40; t += 4) {
-			for (int u = 0; u < 3; u++) {
-				for (int v = 0; v < 4; v++) {
+				for (int t = 0; t < 40; t += 4) {
+					for (int u = 0; u < 3; u++) {
+						for (int v = 0; v < 4; v++) {
 
-					if (seatTable.seat[index].status == 'A')
-						printf("[%s]", seatTable.seat[index].seatNo);
-					else
-						printf("{%s}", seatTable.seat[index].seatNo);
+							if (seatTable.seat[index].status == 'A')
+								printf("[%s]", seatTable.seat[index].seatNo);
+							else
+								printf("{%s}", seatTable.seat[index].seatNo);
 
-					if (v == 1)
-						printf("--");
-					index++;
+							if (v == 1)
+								printf("--");
+							index++;
+						}
+						printf("\t\t");
+						index += 36;
+					}
+					printf("\n");
+					index = t + 4;
 				}
-				printf("\t\t");
-				index += 36;
+				printf("\n******************************************************************************************\n\n");
+
+				printf("[ ] = Available\t{ } = Booked\n");
 			}
-			printf("\n");
-			index = t + 4;
+
 		}
-		printf("\n***************************************************************************************\n\n");
-
-		printf("[ ] = Available\t{ } = Booked\n");
-
 		printf("\nDo you want to see other lists? ( Y = Yes / Other = Exit to menu page ): ");
 		rewind(stdin);
 		scanf("%c", &ans);
