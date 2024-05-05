@@ -1017,13 +1017,13 @@ void addTrainSchedule() {
 			}
 			fprintf(seatL, "\n\n%s\n", newSch.scheduleNo);
 			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "A%02|A\n", d + 1);
+				fprintf(seatL, "A%02d|A\n", d + 1);
 			}
 			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "B%02|A\n", d + 1);
+				fprintf(seatL, "B%02d|A\n", d + 1);
 			}
 			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "C%02|A\n", d + 1);
+				fprintf(seatL, "C%02d|A\n", d + 1);
 			}
 			fclose(seatL);
 			fprintf(addSch, "%s|%s\n%s|%s\n%02d/%02d/%04d|%02d:%02d\n%02d/%02d/%04d|%02d:%02d\n%d\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%.2f\n%s\n\n",
