@@ -243,7 +243,7 @@ void addMemberAcc() {
 		rewind(stdin);
 		scanf("%c", &createChoice);
 	}
-	printf("\n\n");
+	system("cls");
 
 	if (toupper(createChoice) == 'Y') {
 		i = 0;
@@ -264,7 +264,6 @@ void addMemberAcc() {
 
 		fwrite(&member[i], sizeof(Members), 1, addmem);
 
-		system("cls");
 		printf("Your member ID is %s. Please login again. \n\n\n", member[i].memberID);
 	}
 	fclose(addmem);
