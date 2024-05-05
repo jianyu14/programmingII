@@ -92,7 +92,7 @@ void displaySeat(SeatDisplay* seatTable);
 int compareDates(Date date1, Date date2);
 void staffMenuBK();
 void viewTrnBookingStatus();
-void generateReport();
+void generateReportBK();
 void topMealR();
 void trainOccupancyRate();
 
@@ -1214,7 +1214,7 @@ void staffMenuBK() {
 			break;
 
 		case 2:
-			generateReport();
+			generateReportBK();
 			break;
 
 		case 3:
@@ -1278,7 +1278,7 @@ void viewTrnBookingStatus() {
 	}
 	fclose(vBkStatus);
 }
-void generateReport() {
+void generateReportBK() {
 	int inp = 0;
 	char ans;
 
@@ -1311,7 +1311,7 @@ void generateReport() {
 			if (ans == 'Y')
 				staffMenuBK();
 			else {
-				generateReport();
+				generateReportBK();
 			}
 			break;
 
