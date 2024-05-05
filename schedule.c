@@ -181,13 +181,15 @@ void tSchedulingStaffMenu() {
 
 	Staffs staffL[1000];
 	int countStaff = 0;
+	
 	FILE* staffInfo = fopen("staff1.bin", "rb");
 	if (!staffInfo) {
 		printf("Error: Cannot open staff1.bin!!\n");
 		exit(-1);
 	}
 	else {
-		while (fread(&staffL[countStaff], sizeof(Staff), 1, staffInfo) != EOF) {
+
+		while (fread(&staffL[countStaff], sizeof(Staffs), 1, staffInfo) != EOF) {
 			FILE* staffTxt = fopen("staffList.txt", "w");
 			if (!staffTxt) {
 				printf("Error: Cannot open staffList.txt!!\n");
@@ -199,13 +201,17 @@ void tSchedulingStaffMenu() {
 			}
 			fclose(staffTxt);
 		}
+
 		fclose(staffInfo);
-		
+
 
 	}
 
+
 	do {
-		printf("Staff - Train Scheduling\n\n");
+		printf("===================================\n");
+		printf("  Staff Menu for Train Scheduling  \n");
+		printf("===================================\n\n");
 		printf("1. Add\n");
 		printf("2. Search\n");
 		printf("3. Modify\n");
@@ -243,7 +249,7 @@ void tSchedulingStaffMenu() {
 			break;
 		case 7:
 			system("cls");
-			main();
+			//staffMainMenu();
 			break;
 		default:
 			chooseFunction = chkInvalid(chooseFunction);
@@ -3244,7 +3250,9 @@ void tSchedulingUserMenu() {
 	int chooseFunction;
 
 	do {
-		printf("User - Train Scheduling\n\n");
+		printf("====================================\n");
+		printf("  Member Menu for Train Scheduling  \n");
+		printf("====================================\n\n");
 		printf("1. Search\n");
 		printf("2. Display\n");
 		printf("3. Exit\n\n");
@@ -3262,7 +3270,7 @@ void tSchedulingUserMenu() {
 			break;
 		case 3:
 			system("cls");
-			main();
+			//memberMain();
 			break;
 		default:
 			chooseFunction = chkInvalid(chooseFunction);
