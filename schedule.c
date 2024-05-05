@@ -2985,8 +2985,8 @@ void deleteTrainSchedule() {
 	count -= 1;
 
 
-
-	int  seatIndex = 0,editInd;
+	//Delete seat list for this schedule
+	int  seatIndex = 0, editInd;
 	SeatDisplay* seatTable = (SeatDisplay*)malloc(5000 * sizeof(SeatDisplay));
 
 	FILE* seat = fopen("seatList.txt", "r");
@@ -3003,11 +3003,12 @@ void deleteTrainSchedule() {
 			seatIndex++;
 		}
 		fclose(seat);
-		for(int az=0;az<seatIndex;az++){
+		for (int az = 0; az < seatIndex; az++) {
 			if (strcmp(scheduleNo, seatTable[seatIndex].schNo) == 0) {
 				editInd = az;
 			}
 		}
+		editInd = 0;
 		for (int b = editInd; b < seatIndex; b++) {
 			seatTable[editInd] = seatTable[editInd + 1];
 		}
@@ -3019,18 +3020,18 @@ void deleteTrainSchedule() {
 			exit(-1);
 		}
 		else {
-			for(int ay = 0;ay<seatIndex;ay++){
+			for (int ay = 0; ay < seatIndex; ay++) {
 				fprintf(seat, "%s\n", seatTable[ay].schNo);
 				for (int y = 0; y < 119; y++) {
 					fscanf(seat, "%s|%c\n", &seatTable[ay].seat[y].seatNo, &seatTable[ay].seat[y].status);
 				}
 				fscanf(seat, "%s|%c\n\n\n", &seatTable[ay].seat[119].seatNo, &seatTable[ay].seat[119].status);
 			}
-			
+
 		}
 		fclose(seat);
 		free(seatTable);
-			
+
 	}
 
 	FILE* wTrnSch = fopen("trainSchedule.txt", "w");
@@ -3067,6 +3068,7 @@ void deleteTrainSchedule() {
 	}
 	fclose(wTrnSch);
 	free(scheduleList);
+	printf("\nThe train schedule has successfully deleted!!\n\n");
 
 	printf("\n\nDo you want to continue delete Train Schedule? ( Y = Yes ): ");
 	rewind(stdin);
