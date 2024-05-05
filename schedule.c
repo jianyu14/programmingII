@@ -16,8 +16,7 @@ duration in minutes
 
 */
 
-void addFunction();
-void addNewTrain();
+
 
 typedef struct {
 	char trainID[7];
@@ -69,8 +68,26 @@ typedef struct {
 	Seat seat[120];
 }SeatDisplay;
 
-int funcArrayLength(char arr[]);
-void lowerToUpper(char arr[], int length);
+struct validation {
+	char passwordvalid[20];
+	char passphrase[15];
+};
+
+typedef struct {
+	char ID[7];
+	char name[50];
+	char gender;
+	char phoneno[12];
+	char position[30];
+	Date date[11];
+	int salary;
+	char password[20];
+	struct validation valid;
+	char IC[13];
+}Staffs;
+
+
+
 int chkScheduleFormat(char scheduleNo[]);
 int chkTrainIdFormat(char trainID[]);
 int chkDriverIdFormat(char driverID[]);
@@ -84,8 +101,8 @@ int dateDifference(Date d1, Date d2);
 // Function to calculate duration in minutes
 int calDuration(TrainSchedule trnSch);
 
-int compareDates(Date date1, Date date2);
-
+void addFunction();
+void addNewTrain();
 void addNewMealList();
 void addTrainSchedule();
 
@@ -161,6 +178,31 @@ void tSchedulingUserDisplay();
 //Staff Menu
 void tSchedulingStaffMenu() {
 	int chooseFunction;
+
+	Staffs staffL[1000];
+	int countStaff = 0;
+	FILE* staffInfo = fopen("staff1.bin", "rb");
+	if (!staffInfo) {
+		printf("Error: Cannot open staff1.bin!!\n");
+		exit(-1);
+	}
+	else {
+		while (fread(&staffL[countStaff], sizeof(Staff), 1, staffInfo) != EOF) {
+			FILE* staffTxt = fopen("staffList.txt", "w");
+			if (!staffTxt) {
+				printf("Error: Cannot open staffList.txt!!\n");
+				exit(-1);
+			}
+			else {
+				fprintf(staffTxt, "%s|%s\n", staffL[countStaff].ID, staffL[countStaff].name);
+				countStaff++;
+			}
+			fclose(staffTxt);
+		}
+		fclose(staffInfo);
+		
+
+	}
 
 	do {
 		printf("Staff - Train Scheduling\n\n");
@@ -4250,29 +4292,6 @@ void tSchedulingUserDisplay() {
 
 }
 
-
-// Calculate length of string or array
-int funcArrayLength(char arr[]) {
-
-	int length = 0;
-
-	for (int i = 0; arr[i] != '\0'; ++i) {
-		length++;
-	}
-	return length;
-}
-
-// Change user input from lowercase to uppercase
-void lowerToUpper(char arr[], int length) {
-
-	for (int i = 0; i < length; i++) {
-
-		arr[i] = toupper(arr[i]);
-
-	}
-
-}
-
 //Function to check ScheduleNo Format
 int chkScheduleFormat(char scheduleNo[]) {
 
@@ -4416,33 +4435,3 @@ int chkInvalid(int rtr) {
 
 }
 
-//Function to compare 2 date
-int compareDates(Date date1, Date date2) {
-	if (date1.year < date2.year) {
-		return -1; // date1 is earlier
-	}
-	else if (date1.year > date2.year) {
-		return 1; // date2 is earlier
-	}
-	else {
-		// Years are equal, compare months
-		if (date1.month < date2.month) {
-			return -1; // date1 is earlier
-		}
-		else if (date1.month > date2.month) {
-			return 1; // date2 is earlier
-		}
-		else {
-			// Months are equal, compare days
-			if (date1.day < date2.day) {
-				return -1; // date1 is earlier
-			}
-			else if (date1.day > date2.day) {
-				return 1; // date2 is earlier
-			}
-			else {
-				return 0; // Both dates are equal
-			}
-		}
-	}
-}
