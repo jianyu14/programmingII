@@ -91,7 +91,7 @@ void menuStaff() {
 		printf("2.Staff\n");
 		printf("3.Exit\n");
 		printf("Enter a number: ");
-		scanf("%d", &select);
+		select = getValidChoice(1, 3);
 
 		switch (select) {
 
@@ -104,19 +104,11 @@ void menuStaff() {
 			break;
 
 		case 3:
-			printf("Exit now.........\n");
-			printf("\n\n");
 			break;
 
-		default:
-			printf("Invalid Number!!!\n");
-			printf("Please enter again.\n");
-			printf("\n\n");
-			break;
 		}
 	} while (select != 3);
 
-	system("pause");
 }
 
 addstaff() {
@@ -672,7 +664,7 @@ updateStaffInfo() {
 		printf("2.Position\n");
 		printf("3.Exit to the menu\n");
 		printf("Which info do you want to modify? ");
-		scanf("%d", &choice);
+		choice = getValidChoice(1, 3);
 
 		switch (choice) {
 		case 1:
@@ -687,8 +679,6 @@ updateStaffInfo() {
 			managerFirstMenu();
 			break;
 
-		default:
-			printf("Invalid choice!!!\n");
 		}
 	} while (choice != 3);
 }
@@ -748,7 +738,7 @@ updateStaInfo() {
 		printf("2.Password\n");
 		printf("3.Exit to the menu\n");
 		printf("Which info do you want to modify? ");
-		scanf("%d", &choice);
+		choice = getValidChoice(1, 3);
 
 		switch (choice) {
 
@@ -763,10 +753,6 @@ updateStaInfo() {
 		case 3:
 			staffFirstMenu();
 			break;
-
-		default:
-			printf("Invalid choice!!!\n");
-			printf("Please enter again.\n");
 		}
 	} while (choice != 3);
 }
@@ -974,7 +960,7 @@ managerSecondMenu() {
 	printf("1.Login\n");
 	printf("2.Forget Password\n");
 	printf("Enter the number: ");
-	scanf("%d", &ans2);
+	ans2 = getValidChoice(1, 2);
 
 	if (ans2 == 1) {
 		loginManager();
@@ -994,7 +980,7 @@ staffSecondMenu() {
 	printf("1.Login\n");
 	printf("2.Forget Password\n");
 	printf("Enter the number: ");
-	scanf("%d", &ans2);
+	ans2 = getValidChoice(1, 2);
 
 	switch (ans2) {
 
@@ -1004,10 +990,6 @@ staffSecondMenu() {
 
 	case 2:
 		forgetPassword();
-		break;
-
-	default:
-		printf("Invalid value\n");
 		break;
 	}
 
@@ -1030,7 +1012,7 @@ managerFirstMenu() {
 		printf("6.Position Level Report\n");
 		printf("7.Exit\n");
 		printf("Enter the number: ");
-		scanf("%d", &option);
+		option = getValidChoice(1, 7);
 
 		switch (option) {
 
@@ -1063,10 +1045,6 @@ managerFirstMenu() {
 			printf("\n\n");
 			break;
 
-		default:
-			printf("Invalid option\n");
-			printf("Please enter again\n");
-			break;
 		}
 	} while (option != 7);
 }
@@ -1088,8 +1066,8 @@ staffFirstMenu() {
 		printf("6.Remove Staff\n\n");
 		printf("7.Exit\n");
 		printf("Enter the number: ");
-		scanf("%d", &option);
-
+		option = getValidChoice(1, 7);
+		system("cls");
 		switch (option) {
 
 		case 1:
@@ -1120,11 +1098,6 @@ staffFirstMenu() {
 		case 7:
 			printf("Exit now.........\n");
 			printf("\n\n");
-			break;
-
-		default:
-			printf("Invalid Number!!!\n");
-			printf("Please enter again.\n");
 			break;
 		}
 	} while (option != 7);
