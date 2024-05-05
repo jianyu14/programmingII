@@ -77,7 +77,7 @@ staffMainMenu() {
 			menuStaff();
 			break;
 		case 2:
-			tSchedulingStaffMenu();;
+			tSchedulingStaffMenu();
 			break;
 		case 3:
 			staffMenuBK();
@@ -86,4 +86,4 @@ staffMainMenu() {
 			break;
 		}
 	} while (choice != 4);
-};
+}
