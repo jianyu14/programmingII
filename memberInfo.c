@@ -77,7 +77,7 @@ void displayMemberInformation(Members* mem);
 void modifyMemberInformation(Members* mem);
 void memberLost();
 void memberLostSearch();
-void lostAndFoundList();
+void lostAndFoundListMB();
 bool deleteMemberInformation(Members* mem, bool isAccountDeleted);
 void memberMain();
 
@@ -85,7 +85,7 @@ void memberMain() {
 	int memFirstChoice;
 
 	do {
-		
+
 		memberFirstMenu();
 		memFirstChoice = getValidChoice(1, 4);
 		switch (memFirstChoice) {
@@ -101,9 +101,9 @@ void memberMain() {
 		case 4:
 			break;
 		}
-		
+
 	} while (memFirstChoice != 4);
-	
+
 }
 
 void memberFirstMenu() {
@@ -118,7 +118,7 @@ void memberFirstMenu() {
 
 void addMemberAcc() {
 	char rePassword[30];
-	char createChoice;	
+	char createChoice;
 	int i = 0;
 	int isValid;
 	Members member[MAXMEMBER];
@@ -180,7 +180,7 @@ void addMemberAcc() {
 	//Check phone format
 	do {
 		isValid = 1;
-		if (strlen(temp.memberContact) != 10 && strlen(temp.memberContact)!=11) {
+		if (strlen(temp.memberContact) != 10 && strlen(temp.memberContact) != 11) {
 			isValid = 0;
 			printf("Invalid phone number format. Please enter 10 or 11 digits format (without '-'): ");
 			rewind(stdin);
@@ -211,8 +211,8 @@ void addMemberAcc() {
 	printf("Re-enter your password: ");
 	rewind(stdin);
 	scanf("%[^\n]", &rePassword);
-	
-	while(strcmp(temp.memberPassword, rePassword)!=0){
+
+	while (strcmp(temp.memberPassword, rePassword) != 0) {
 		printf("Password does not match. Please create again your password: ");
 		rewind(stdin);
 		scanf("%[^\n]", &temp.memberPassword);
@@ -242,7 +242,7 @@ void addMemberAcc() {
 	}
 	printf("\n\n");
 
-	if(toupper(createChoice) == 'Y') {
+	if (toupper(createChoice) == 'Y') {
 		i = 0;
 		char lastMemberID[7];
 		int newLastMemberID = 1;
@@ -254,7 +254,7 @@ void addMemberAcc() {
 			strcpy(lastMemberID, member[i - 1].memberID);
 			newLastMemberID = atoi(lastMemberID + 1) + 1;
 		}
-	
+
 		sprintf(temp.memberID, "M%05d", newLastMemberID);
 		strftime(temp.dateJoined, 11, "%Y-%m-%d", localtime(&current_time));
 		member[i] = temp;
@@ -348,14 +348,14 @@ void forgetMemberPassword() {
 	int found = 0;
 	int count;
 	char rePassword[30];
-	FILE *forgetMemPass, *newMemPass;
+	FILE* forgetMemPass, * newMemPass;
 	forgetMemPass = fopen("memberInfo.bin", "rb");
 
 	system("cls");
 	if (forgetMemPass == NULL) {
 		printf("Unable to open the file...\n\n");
 		exit(-1);
-	}	
+	}
 
 	while (fread(&member[i], sizeof(Members), 1, forgetMemPass)) {
 		i++;
@@ -406,8 +406,8 @@ void forgetMemberPassword() {
 			found = 1;
 			break;
 		}
-		else { 
-			i++; 
+		else {
+			i++;
 		}
 	}
 
@@ -417,7 +417,7 @@ void forgetMemberPassword() {
 		printf("Unable to open the file...\n\n");
 		exit(-1);
 	}
-	
+
 	if (found == 1) {
 		printf("Please create a new password: ");
 		rewind(stdin);
@@ -444,7 +444,7 @@ void forgetMemberPassword() {
 			scanf("%[^\n]", &rePassword);
 		}
 		strcpy(member[i].memberPassword, temp.memberPassword);
-		
+
 	}
 
 	for (i = 0; i < count; i++) {
@@ -452,8 +452,8 @@ void forgetMemberPassword() {
 	}
 
 	system("cls");
-	if (found == 1) { 
-		printf("Your password is now reset. Please login again. \n\n"); 
+	if (found == 1) {
+		printf("Your password is now reset. Please login again. \n\n");
 	}
 	else {
 		printf("Sorry, invalid member ID or wrong data entered.\n\n");
@@ -471,7 +471,7 @@ void memberSecondMenu() {
 	printf("Please select your choice from the following: ");
 }
 
-bool memberInformation(Members *member, bool accountDeleted) {
+bool memberInformation(Members* member, bool accountDeleted) {
 	int memThirdChoice, option;
 	Members currentMem;
 	currentMem = *member;
@@ -516,7 +516,7 @@ bool memberInformation(Members *member, bool accountDeleted) {
 					memberLostSearch();
 					break;
 				case 3:
-					lostAndFoundList();
+					lostAndFoundListMB();
 					break;
 				case 4:
 					break;
@@ -525,7 +525,7 @@ bool memberInformation(Members *member, bool accountDeleted) {
 					break;
 				}
 			} while (option != 4);
-			
+
 			break;
 		case 5:
 			accountDeleted = deleteMemberInformation(&currentMem, &accountDeleted);
@@ -537,7 +537,7 @@ bool memberInformation(Members *member, bool accountDeleted) {
 	return accountDeleted;
 }
 
-void searchMemberInformation(Members *mem) {
+void searchMemberInformation(Members* mem) {
 	Invoice booking;
 	char choice;
 	char bookingID[10];
@@ -613,7 +613,7 @@ void searchMemberInformation(Members *mem) {
 		else {
 			printf("Booking record not found.\n\n");
 		}
-		
+
 		printf("Any more booking history to search? (Y=Yes/N=No): ");
 		scanf(" %c", &choice);
 
@@ -626,8 +626,8 @@ void searchMemberInformation(Members *mem) {
 	fclose(bookingPtr);
 }
 
-void modifyMemberInformation(Members *mem) {
-	FILE *readMemPtr, *modifyMemPtr;
+void modifyMemberInformation(Members* mem) {
+	FILE* readMemPtr, * modifyMemPtr;
 	int memFourthChoice;
 	int isValid;
 	int i = 0;
@@ -719,7 +719,7 @@ void modifyMemberInformation(Members *mem) {
 				for (i = 0; i < count; i++) {
 					fwrite(&member[i], sizeof(Members), 1, modifyMemPtr);
 				}
-				
+
 				printf("Your phone number is now changed to %s.\n\n", member[modifyArray].memberContact);
 
 				fclose(modifyMemPtr);
@@ -788,13 +788,13 @@ void modifyMemberInformation(Members *mem) {
 
 }
 
-void displayMemberInformation(Members *mem) {
+void displayMemberInformation(Members* mem) {
 	system("cls");
 	printf("MEMBER INFORMATION\n\n");
 	printf("%-12s%-30s%-8s%-13s%-12s%-30s%-12s\n", "MEMBER ID", "NAME", "GENDER", "NRIC", "PHONE", "PASSPHRASE", "DATE JOINED");
 	printf("=========== ============================= ======= ============ =========== ============================= ============\n");
-	printf("%-12s%-30s%-8c%-13s%-12s%-30s%-12s\n\n", mem->memberID, mem->memberName, 
-		mem->memberGender, mem->memberIC, mem->memberContact, mem->memberPassphrase,  mem->dateJoined);
+	printf("%-12s%-30s%-8c%-13s%-12s%-30s%-12s\n\n", mem->memberID, mem->memberName,
+		mem->memberGender, mem->memberIC, mem->memberContact, mem->memberPassphrase, mem->dateJoined);
 }
 
 void memberLost() {
@@ -935,7 +935,7 @@ void memberLostSearch() {
 	fclose(lostCheckPtr);
 }
 
-void lostAndFoundList() {
+void lostAndFoundListMB() {
 
 	FILE* lostPtr;
 	Lost lost[MAXITEM];
@@ -962,7 +962,7 @@ void lostAndFoundList() {
 }
 
 
-bool deleteMemberInformation(Members *mem, bool isAccountDeleted) {
+bool deleteMemberInformation(Members* mem, bool isAccountDeleted) {
 	FILE* fCopy, * fPaste;
 	char confirm;
 	int i = 0;
