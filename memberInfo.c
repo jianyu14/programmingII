@@ -107,7 +107,9 @@ void memberMain() {
 }
 
 void memberFirstMenu() {
-	printf("MEMBER PAGE\n\n");
+	printf("============================\n");
+	printf("WELCOME TO MEMBER MAIN MENU!\n");
+	printf("============================\n\n");
 	printf("1. Register a new account\n");
 	printf("2. Login your account\n");
 	printf("3. Forget password?\n");
@@ -133,7 +135,8 @@ void addMemberAcc() {
 		exit(-1);
 	}
 
-	printf("MEMBER REGISTRATION\n\n");
+	printf("MEMBER REGISTRATION\n");
+	printf("===================\n\n");
 	printf("Enter your name: ");
 	rewind(stdin);
 	scanf("%[^\n]", &temp.memberName);
@@ -294,7 +297,8 @@ void loginMemberAcc() {
 	fclose(loginMem);
 
 
-	printf("MEMBER LOGIN PAGE\n\n");
+	printf("MEMBER LOGIN PAGE\n");
+	printf("=================\n\n");
 	printf("Please enter your member ID to login: ");
 	rewind(stdin);
 	scanf("%s", &memberID);
@@ -364,7 +368,8 @@ void forgetMemberPassword() {
 	count = i;
 	fclose(forgetMemPass);
 
-	printf("PASSWORD RESET PAGE\n\n");
+	printf("PASSWORD RESET PAGE\n");
+	printf("===================\n\n");
 	printf("To verify you are the account holder, please enter the following data: \n");
 	printf("Please enter your member ID: ");
 	rewind(stdin);
@@ -463,7 +468,8 @@ void forgetMemberPassword() {
 }
 
 void memberSecondMenu() {
-	printf("MEMBER MENU\n\n");
+	printf("MEMBER MENU\n");
+	printf("===========\n\n");
 	printf("1. Ticket booking\n");
 	printf("2. Train scheduling\n");
 	printf("3. Your information\n");
@@ -478,7 +484,8 @@ bool memberInformation(Members* member, bool accountDeleted) {
 	accountDeleted = false;
 	system("cls");
 	do {
-		printf("MEMBER INFORMATION\n\n");
+		printf("MEMBER INFORMATION\n");
+		printf("==================\n\n");
 		printf("1. Search booking history\n");
 		printf("2. Modify your information\n");
 		printf("3. Display your information\n");
@@ -500,7 +507,8 @@ bool memberInformation(Members* member, bool accountDeleted) {
 			break;
 		case 4:
 			do {
-				printf("LOST AND FOUND\n\n");
+				printf("LOST AND FOUND\n");
+				printf("==============\n\n");
 				printf("1. Report lost item\n");
 				printf("2. Check lost item status\n");
 				printf("3. Display lost item list\n");
@@ -519,9 +527,6 @@ bool memberInformation(Members* member, bool accountDeleted) {
 					lostAndFoundListMB();
 					break;
 				case 4:
-					break;
-				default:
-					printf("Invalid choice. Please enter a valid choice(1, 2, 3, 4).\n\n");
 					break;
 				}
 			} while (option != 4);
@@ -553,7 +558,8 @@ void searchMemberInformation(Members* mem) {
 		exit(-1);
 	}
 
-	printf("SEARCH BOOKING HISTORY\n\n");
+	printf("SEARCH BOOKING HISTORY\n");
+	printf("======================\n\n");
 	printf("Do you want to search your booking history? (Y=Yes/N=No): ");
 	scanf(" %c", &choice);
 
@@ -564,7 +570,8 @@ void searchMemberInformation(Members* mem) {
 	system("cls");
 	while (toupper(choice) == 'Y') {
 		system("cls");
-		printf("SEARCH BOOKING HISTORY\n\n");
+		printf("SEARCH BOOKING HISTORY\n");
+		printf("======================\n\n");
 		printf("Enter your booking ID to search: ");
 		rewind(stdin);
 		scanf("%s", &bookingID);
@@ -656,7 +663,8 @@ void modifyMemberInformation(Members* mem) {
 	fclose(readMemPtr);
 
 	do {
-		printf("MODIFY YOUR INFORMATION\n\n");
+		printf("MODIFY YOUR INFORMATION\n");
+		printf("=======================\n\n");
 		printf("1. Change contact\n");
 		printf("2. Change password\n");
 		printf("3. Back to previous menu\n\n");
@@ -665,7 +673,8 @@ void modifyMemberInformation(Members* mem) {
 		system("cls");
 		switch (memFourthChoice) {
 		case 1:
-			printf("CHANGE CONTACT\n\n");
+			printf("CHANGE CONTACT\n");
+			printf("==============\n\n");
 			printf("Your current phone number is %s.\n\n", modifyCurrentMem.memberContact);
 			printf("Please enter your new phone number (10 or 11 digits without '-'): ");
 			rewind(stdin);
@@ -726,7 +735,8 @@ void modifyMemberInformation(Members* mem) {
 			}
 			break;
 		case 2:
-			printf("CHANGE PASSWORD\n\n");
+			printf("CHANGE PASSWORD\n");
+			printf("===============\n\n");
 			printf("Enter your old password: ");
 			rewind(stdin);
 			scanf("%[^\n]", &oldMemberPassword);
@@ -790,7 +800,8 @@ void modifyMemberInformation(Members* mem) {
 
 void displayMemberInformation(Members* mem) {
 	system("cls");
-	printf("MEMBER INFORMATION\n\n");
+	printf("MEMBER INFORMATION\n");
+	printf("==================\n\n");
 	printf("%-12s%-30s%-8s%-13s%-12s%-30s%-12s\n", "MEMBER ID", "NAME", "GENDER", "NRIC", "PHONE", "PASSPHRASE", "DATE JOINED");
 	printf("=========== ============================= ======= ============ =========== ============================= ============\n");
 	printf("%-12s%-30s%-8c%-13s%-12s%-30s%-12s\n\n", mem->memberID, mem->memberName,
@@ -824,7 +835,8 @@ void memberLost() {
 	}
 
 	do {
-		printf("REPORT LOST ITEM\n\n");
+		printf("REPORT LOST ITEM\n");
+		printf("================\n\n");
 		printf("Enter your lost item: ");
 		rewind(stdin);
 		scanf("%[^\n]", &temp.description);
@@ -881,7 +893,8 @@ void memberLostSearch() {
 	}
 
 	do {
-		printf("CHECK LOST ITEM STATUS\n\n");
+		printf("CHECK LOST ITEM STATUS\n");
+		printf("======================\n\n");
 		printf("Enter your lost item ID to check the status: ");
 		rewind(stdin);
 		scanf("%s", &checkItemID);
@@ -949,6 +962,8 @@ void lostAndFoundListMB() {
 		exit(-1);
 	}
 
+	printf("LOST ITEM LIST\n");
+	printf("==============\n\n");
 	printf("%-14s%-30s  %-15s %-15s %-20s  %-12s\n", "LOST ITEM ID", "LOST ITEM", "LOST ITEM DATE", "LOST ITEM TIME", "LOST ITEM PLACE", "LOST STATUS");
 	printf("============  ==============================  ==============  ==============  ====================  ============\n");
 	while (fread(&lost[i], sizeof(Lost), 1, lostPtr) == 1) {
@@ -969,7 +984,8 @@ bool deleteMemberInformation(Members* mem, bool isAccountDeleted) {
 	Members member[MAXMEMBER];
 
 	system("cls");
-	printf("DELETE ACCOUNT\n\n");
+	printf("DELETE ACCOUNT\n");
+	printf("==============\n\n");
 	printf("Are you sure you want to delete your account? \n");
 	printf("(Y=Yes/N=No): ");
 	scanf(" %c", &confirm);
