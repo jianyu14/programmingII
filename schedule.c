@@ -2973,13 +2973,13 @@ void deleteTrainSchedule() {
 			frmt = chkInvalid(frmt);
 	} while (frmt == -1);
 
-
+	indexEdit = 0;
 	for (int a = 0; a < count; a++) {
 		if (strcmp(scheduleNo, scheduleList[a].scheduleNo) == 0) {
-			indexEdit = count;
+			indexEdit = a;
 		}
 	}
-	for (int b = indexEdit; b < count; b++) {
+	for (int b = indexEdit; b < count-1; b++) {
 		scheduleList[indexEdit] = scheduleList[indexEdit + 1];
 	}
 	count -= 1;
