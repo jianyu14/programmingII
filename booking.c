@@ -133,7 +133,7 @@ void userMenuBK(Member* member) {
 			scanf("%c", &ans);
 			ans = toupper(ans);
 			if (ans == 'Y')
-				main();
+				memberMain();
 			else {
 				userMenuBK(member);
 			}
