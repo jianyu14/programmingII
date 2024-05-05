@@ -819,7 +819,7 @@ void addTrainSchedule() {
 	TrainSchedule schedule, newSch;
 	TrainInfo drvMode;
 	int count, frmtTrnID, frmtDrvID;
-	char schNo[6];
+	char schNo[6], again;
 
 	FILE* getTrnSch = fopen("trainSchedule.txt", "r");
 
@@ -828,252 +828,265 @@ void addTrainSchedule() {
 		exit(-1);
 	}
 	else {
-		count = 0;
-		while (fscanf(getTrnSch, "%[^|]|%[^\n]\n%[^|]|%[^\n]\n%d/%d/%d|%d:%d\n%d/%d/%d|%d:%d\n%d\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%lf\n%[^\n]\n\n",
-			&schedule.scheduleNo, &schedule.trainID,
-			&schedule.departureStation, &schedule.arrivalStation,
-			&schedule.departureDate.day, &schedule.departureDate.month, &schedule.departureDate.year, &schedule.departureTime.hours, &schedule.departureTime.minutes,
-			&schedule.arrivalDate.day, &schedule.arrivalDate.month, &schedule.arrivalDate.year, &schedule.arrivalTime.hours, &schedule.arrivalTime.minutes,
-			&schedule.duration,
-			&schedule.mealList[0].mealName, &schedule.mealList[0].mainFood, &schedule.mealList[0].drinks, &schedule.mealList[0].snacks, &schedule.mealList[0].mealPrice,
-			&schedule.mealList[1].mealName, &schedule.mealList[1].mainFood, &schedule.mealList[1].drinks, &schedule.mealList[1].snacks, &schedule.mealList[1].mealPrice,
-			&schedule.mealList[2].mealName, &schedule.mealList[2].mainFood, &schedule.mealList[2].drinks, &schedule.mealList[2].snacks, &schedule.mealList[2].mealPrice,
-			&schedule.staff[0].staffID, &schedule.staff[0].staffName,
-			&schedule.staff[1].staffID, &schedule.staff[1].staffName,
-			&schedule.staff[2].staffID, &schedule.staff[2].staffName,
-			&schedule.staff[3].staffID, &schedule.staff[3].staffName,
-			&schedule.staff[4].staffID, &schedule.staff[4].staffName,
-			&schedule.staff[5].staffID, &schedule.staff[5].staffName,
-			&schedule.staff[6].staffID, &schedule.staff[6].staffName,
-			&schedule.staff[7].staffID, &schedule.staff[7].staffName,
-			&schedule.staff[8].staffID, &schedule.staff[8].staffName,
-			&schedule.staff[9].staffID, &schedule.staff[9].staffName,
-			&schedule.driver[0].driverID, &schedule.driver[0].driverName,
-			&schedule.driver[1].driverID, &schedule.driver[1].driverName,
-			&schedule.schTrnPrice,
-			&schedule.status) != EOF) {
-			count++;
-		}
-
-		do {
-			sprintf(newSch.scheduleNo, "S%04d", atoi(schedule.scheduleNo + 1) + 1);
-			displayTrainList();
-			printf("\nEnter Train ID for [ %s ]: ", newSch.scheduleNo);
-			rewind(stdin);
-			scanf("%s", &newSch.trainID);
-			lowerToUpper(newSch.trainID, funcArrayLength(newSch.trainID));
-
-			frmtTrnID = chkTrainIdFormat(newSch.trainID);
-
-			if (frmtTrnID != 1) {
-				frmtTrnID = chkInvalid(frmtTrnID);
+			count = 0;
+			while (fscanf(getTrnSch, "%[^|]|%[^\n]\n%[^|]|%[^\n]\n%d/%d/%d|%d:%d\n%d/%d/%d|%d:%d\n%d\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^|]|%[^|]|%[^|]|%lf\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%[^|]|%[^\n]\n%lf\n%[^\n]\n\n",
+				&schedule.scheduleNo, &schedule.trainID,
+				&schedule.departureStation, &schedule.arrivalStation,
+				&schedule.departureDate.day, &schedule.departureDate.month, &schedule.departureDate.year, &schedule.departureTime.hours, &schedule.departureTime.minutes,
+				&schedule.arrivalDate.day, &schedule.arrivalDate.month, &schedule.arrivalDate.year, &schedule.arrivalTime.hours, &schedule.arrivalTime.minutes,
+				&schedule.duration,
+				&schedule.mealList[0].mealName, &schedule.mealList[0].mainFood, &schedule.mealList[0].drinks, &schedule.mealList[0].snacks, &schedule.mealList[0].mealPrice,
+				&schedule.mealList[1].mealName, &schedule.mealList[1].mainFood, &schedule.mealList[1].drinks, &schedule.mealList[1].snacks, &schedule.mealList[1].mealPrice,
+				&schedule.mealList[2].mealName, &schedule.mealList[2].mainFood, &schedule.mealList[2].drinks, &schedule.mealList[2].snacks, &schedule.mealList[2].mealPrice,
+				&schedule.staff[0].staffID, &schedule.staff[0].staffName,
+				&schedule.staff[1].staffID, &schedule.staff[1].staffName,
+				&schedule.staff[2].staffID, &schedule.staff[2].staffName,
+				&schedule.staff[3].staffID, &schedule.staff[3].staffName,
+				&schedule.staff[4].staffID, &schedule.staff[4].staffName,
+				&schedule.staff[5].staffID, &schedule.staff[5].staffName,
+				&schedule.staff[6].staffID, &schedule.staff[6].staffName,
+				&schedule.staff[7].staffID, &schedule.staff[7].staffName,
+				&schedule.staff[8].staffID, &schedule.staff[8].staffName,
+				&schedule.staff[9].staffID, &schedule.staff[9].staffName,
+				&schedule.driver[0].driverID, &schedule.driver[0].driverName,
+				&schedule.driver[1].driverID, &schedule.driver[1].driverName,
+				&schedule.schTrnPrice,
+				&schedule.status) != EOF) {
+				count++;
 			}
-		} while (frmtTrnID == -1);
 
-		//if driving mode is auto, drivers will NULL, otherwise, have to enter 2 drivers
-		FILE* getDrvMode = fopen("newTrain.txt", "r");
-		if (!getDrvMode) {
-			printf("\nError: Cannot open newTrain.txt!!\n");
-			exit(-1);
-		}
-		else {
-			system("cls");
-			while (fscanf(getDrvMode, "%[^|]|%d|%d|%[^\n]\n", &drvMode.trainID, &drvMode.trainCoach, &drvMode.trainCapacity, &drvMode.drivingMode) != EOF) {
-				if (strcmp(newSch.trainID, drvMode.trainID) == 0) {
-					if (strcmp(drvMode.drivingMode, "AUTO") == 0) {
-						for (int i = 0; i < 2; i++) {
-							strcpy(newSch.driver[i].driverID, "NULL");
-							strcpy(newSch.driver[i].driverName, "NULL");
+			do {
+				sprintf(newSch.scheduleNo, "S%04d", atoi(schedule.scheduleNo + 1) + 1);
+				displayTrainList();
+				printf("\nEnter Train ID for [ %s ]: ", newSch.scheduleNo);
+				rewind(stdin);
+				scanf("%s", &newSch.trainID);
+				lowerToUpper(newSch.trainID, funcArrayLength(newSch.trainID));
+
+				frmtTrnID = chkTrainIdFormat(newSch.trainID);
+
+				if (frmtTrnID != 1) {
+					frmtTrnID = chkInvalid(frmtTrnID);
+				}
+			} while (frmtTrnID == -1);
+
+			//if driving mode is auto, drivers will NULL, otherwise, have to enter 2 drivers
+			FILE* getDrvMode = fopen("newTrain.txt", "r");
+			if (!getDrvMode) {
+				printf("\nError: Cannot open newTrain.txt!!\n");
+				exit(-1);
+			}
+			else {
+				system("cls");
+				while (fscanf(getDrvMode, "%[^|]|%d|%d|%[^\n]\n", &drvMode.trainID, &drvMode.trainCoach, &drvMode.trainCapacity, &drvMode.drivingMode) != EOF) {
+					if (strcmp(newSch.trainID, drvMode.trainID) == 0) {
+						if (strcmp(drvMode.drivingMode, "AUTO") == 0) {
+							for (int i = 0; i < 2; i++) {
+								strcpy(newSch.driver[i].driverID, "NULL");
+								strcpy(newSch.driver[i].driverName, "NULL");
+							}
 						}
-					}
-					else {
-						system("cls");
-						displayDriverList();
-						for (int j = 0; j < 2; j++) {
-							do {
-								frmtDrvID = 0;
-								printf("\nEnter Driver [%d]' ID: ", j + 1);
-								rewind(stdin);
-								scanf("%s", &newSch.driver[j].driverID);
-								lowerToUpper(newSch.driver[j].driverID, funcArrayLength(newSch.driver[j].driverID));
+						else {
+							system("cls");
+							displayDriverList();
+							for (int j = 0; j < 2; j++) {
+								do {
+									frmtDrvID = 0;
+									printf("\nEnter Driver [%d]' ID: ", j + 1);
+									rewind(stdin);
+									scanf("%s", &newSch.driver[j].driverID);
+									lowerToUpper(newSch.driver[j].driverID, funcArrayLength(newSch.driver[j].driverID));
 
-								//chk driver ID format
-								frmtDrvID = chkDriverIdFormat(newSch.driver[j].driverID);
+									//chk driver ID format
+									frmtDrvID = chkDriverIdFormat(newSch.driver[j].driverID);
 
-								if (frmtDrvID != 1) {
-									frmtDrvID = chkInvalid(frmtDrvID);
-								}
-								else {
-									FILE* getDrvName = fopen("driverList.txt", "r");
-									Driver drvName;
-
-									if (!getDrvName) {
-										printf("Error: Cannot open driverList.txt!!\n");
-										exit(-1);
+									if (frmtDrvID != 1) {
+										frmtDrvID = chkInvalid(frmtDrvID);
 									}
 									else {
-										while (fscanf(getDrvName, "%[^|]|%[^\n]\n", &drvName.driverID, &drvName.driverName) != EOF) {
-											if (strcmp(newSch.driver[j].driverID, drvName.driverID) == 0) {
-												strcpy(newSch.driver[j].driverName, drvName.driverName);
+										FILE* getDrvName = fopen("driverList.txt", "r");
+										Driver drvName;
+
+										if (!getDrvName) {
+											printf("Error: Cannot open driverList.txt!!\n");
+											exit(-1);
+										}
+										else {
+											while (fscanf(getDrvName, "%[^|]|%[^\n]\n", &drvName.driverID, &drvName.driverName) != EOF) {
+												if (strcmp(newSch.driver[j].driverID, drvName.driverID) == 0) {
+													strcpy(newSch.driver[j].driverName, drvName.driverName);
+												}
+												//printf("%s %s\n", newSch.driver[j].driverID, newSch.driver[j].driverName);
+
 											}
-											//printf("%s %s\n", newSch.driver[j].driverID, newSch.driver[j].driverName);
 
 										}
-
+										fclose(getDrvName);
 									}
-									fclose(getDrvName);
-								}
-							} while (frmtDrvID == -1);
+								} while (frmtDrvID == -1);
+							}
 						}
 					}
 				}
+
+			}
+			fclose(getDrvMode);
+			fclose(getTrnSch);
+
+			system("cls");
+
+			//Enter departure info
+			printf("\nEnter Departure Station for [ %s ]: ", newSch.scheduleNo);
+			rewind(stdin);
+			scanf("%[^\n]", &newSch.departureStation);
+			lowerToUpper(newSch.departureStation, funcArrayLength(newSch.departureStation));
+
+			printf("\nEnter Departure Date and Time for [ %s ] in ( DD/MM/YYYY HH:MM ): ", newSch.scheduleNo);
+			scanf("%d/%d/%d %d:%d", &newSch.departureDate.day, &newSch.departureDate.month, &newSch.departureDate.year, &newSch.departureTime.hours, &newSch.departureTime.minutes);
+
+			//Enter arrival info
+			printf("\n\nEnter Arrival Station for [ %s ]: ", newSch.scheduleNo);
+			rewind(stdin);
+			scanf("%[^\n]", &newSch.arrivalStation);
+			lowerToUpper(newSch.arrivalStation, funcArrayLength(newSch.arrivalStation));
+
+
+			printf("\nEnter Arrival Date and Time for [ %s ] in ( DD/MM/YYYY HH:MM ): ", newSch.scheduleNo);
+			scanf("%d/%d/%d %d:%d", &newSch.arrivalDate.day, &newSch.arrivalDate.month, &newSch.arrivalDate.year, &newSch.arrivalTime.hours, &newSch.arrivalTime.minutes);
+
+			newSch.duration = calDuration(newSch);
+
+			//Enter Meal list info
+			system("cls");
+
+			displayMealList();
+
+			for (int i = 0; i < 3; i++) {
+				printf("\nEnter Meal [%d] for [ %s ] with meal name: ", i + 1, newSch.scheduleNo);
+				rewind(stdin);
+				scanf("%[^\n]", &newSch.mealList[i].mealName);
+				lowerToUpper(newSch.mealList[i].mealName, funcArrayLength(newSch.mealList[i].mealName));
+
+				FILE* getMeal = fopen("mealList.txt", "r");
+				Meal mList;
+				if (!getMeal) {
+					printf("Error: Cannot open mealList.txt!!\n");
+					exit(-1);
+				}
+				else {
+					fseek(getMeal, SEEK_SET, 0);
+					while (fscanf(getMeal, "%[^|]|%[^|]|%[^|]|%[^|]|%lf\n", &mList.mealName, &mList.mainFood, &mList.drinks, &mList.snacks, &mList.mealPrice) != EOF) {
+						if (strcmp(mList.mealName, newSch.mealList[i].mealName) == 0) {
+							strcpy(newSch.mealList[i].mainFood, mList.mainFood);
+							strcpy(newSch.mealList[i].drinks, mList.drinks);
+							strcpy(newSch.mealList[i].snacks, mList.snacks);
+							newSch.mealList[i].mealPrice = mList.mealPrice;
+						}
+					}
+				}
+				fclose(getMeal);
 			}
 
-		}
-		fclose(getDrvMode);
-		fclose(getTrnSch);
+			//Enter staff list info
+			system("cls");
 
-		system("cls");
+			displayStaffList();
 
-		//Enter departure info
-		printf("\nEnter Departure Station for [ %s ]: ", newSch.scheduleNo);
-		rewind(stdin);
-		scanf("%[^\n]", &newSch.departureStation);
-		lowerToUpper(newSch.departureStation, funcArrayLength(newSch.departureStation));
+			for (int i = 0; i < 10; i++) {
+				printf("\nEnter Staff [%d] for [ %s ] with Staff ID: ", i + 1, newSch.scheduleNo);
+				rewind(stdin);
+				scanf("%s", &newSch.staff[i].staffID);
+				lowerToUpper(newSch.staff[i].staffID, funcArrayLength(newSch.staff[i].staffID));
 
-		printf("\nEnter Departure Date and Time for [ %s ] in ( DD/MM/YYYY HH:MM ): ", newSch.scheduleNo);
-		scanf("%d/%d/%d %d:%d", &newSch.departureDate.day, &newSch.departureDate.month, &newSch.departureDate.year, &newSch.departureTime.hours, &newSch.departureTime.minutes);
+				FILE* getStaffID = fopen("staffList.txt", "r");
+				Staff staff;
+				if (!getStaffID) {
+					printf("\nError: Cannot open staffList.txt!!\n");
+					exit(-1);
+				}
+				else {
+					fseek(getStaffID, SEEK_SET, 0);
+					while (fscanf(getStaffID, "%[^|]|%[^\n]\n", &staff.staffID, &staff.staffName) != EOF) {
+						if (strcmp(newSch.staff[i].staffID, staff.staffID) == 0) {
+							strcpy(newSch.staff[i].staffName, staff.staffName);
+						}
+					}
+					fclose(getStaffID);
+				}
+			}
 
-		//Enter arrival info
-		printf("\n\nEnter Arrival Station for [ %s ]: ", newSch.scheduleNo);
-		rewind(stdin);
-		scanf("%[^\n]", &newSch.arrivalStation);
-		lowerToUpper(newSch.arrivalStation, funcArrayLength(newSch.arrivalStation));
+			//Enter Price
 
+			system("cls");
 
-		printf("\nEnter Arrival Date and Time for [ %s ] in ( DD/MM/YYYY HH:MM ): ", newSch.scheduleNo);
-		scanf("%d/%d/%d %d:%d", &newSch.arrivalDate.day, &newSch.arrivalDate.month, &newSch.arrivalDate.year, &newSch.arrivalTime.hours, &newSch.arrivalTime.minutes);
+			printf("Enter Price for [ %s ]: ", newSch.scheduleNo);
+			scanf("%lf", &newSch.schTrnPrice);
 
-		newSch.duration = calDuration(newSch);
+			//Status will be PREPARING
+			strcpy(newSch.status, "PREPARING");
 
-		//Enter Meal list info
-		system("cls");
-
-		displayMealList();
-
-		for (int i = 0; i < 3; i++) {
-			printf("\nEnter Meal [%d] for [ %s ] with meal name: ", i + 1, newSch.scheduleNo);
-			rewind(stdin);
-			scanf("%[^\n]", &newSch.mealList[i].mealName);
-			lowerToUpper(newSch.mealList[i].mealName, funcArrayLength(newSch.mealList[i].mealName));
-
-			FILE* getMeal = fopen("mealList.txt", "r");
-			Meal mList;
-			if (!getMeal) {
-				printf("Error: Cannot open mealList.txt!!\n");
+			FILE* addSch = fopen("trainSchedule.txt", "a");
+			if (!addSch) {
+				printf("Error: Cannot open trainSchedule.txt!!\n");
 				exit(-1);
 			}
 			else {
-				fseek(getMeal, SEEK_SET, 0);
-				while (fscanf(getMeal, "%[^|]|%[^|]|%[^|]|%[^|]|%lf\n", &mList.mealName, &mList.mainFood, &mList.drinks, &mList.snacks, &mList.mealPrice) != EOF) {
-					if (strcmp(mList.mealName, newSch.mealList[i].mealName) == 0) {
-						strcpy(newSch.mealList[i].mainFood, mList.mainFood);
-						strcpy(newSch.mealList[i].drinks, mList.drinks);
-						strcpy(newSch.mealList[i].snacks, mList.snacks);
-						newSch.mealList[i].mealPrice = mList.mealPrice;
-					}
+				FILE* seatL = fopen("seatList.txt", "a");
+				if (!seatL) {
+					printf("Error: Cannot open seatList.txt!!\n");
+					exit(-1);
 				}
+				fprintf(seatL, "\n\n%s\n", newSch.scheduleNo);
+				for (int d = 0; d < 40; d++) {
+					fprintf(seatL, "A%02d|A\n", d + 1);
+				}
+				for (int d = 0; d < 40; d++) {
+					fprintf(seatL, "B%02d|A\n", d + 1);
+				}
+				for (int d = 0; d < 40; d++) {
+					fprintf(seatL, "C%02d|A\n", d + 1);
+				}
+				fclose(seatL);
+				fprintf(addSch, "%s|%s\n%s|%s\n%02d/%02d/%04d|%02d:%02d\n%02d/%02d/%04d|%02d:%02d\n%d\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%.2f\n%s\n\n",
+					newSch.scheduleNo, newSch.trainID,
+					newSch.departureStation, newSch.arrivalStation,
+					newSch.departureDate.day, newSch.departureDate.month, newSch.departureDate.year, newSch.departureTime.hours, newSch.departureTime.minutes,
+					newSch.arrivalDate.day, newSch.arrivalDate.month, newSch.arrivalDate.year, newSch.arrivalTime.hours, newSch.arrivalTime.minutes,
+					newSch.duration,
+					newSch.mealList[0].mealName, newSch.mealList[0].mainFood, newSch.mealList[0].drinks, newSch.mealList[0].snacks, newSch.mealList[0].mealPrice,
+					newSch.mealList[1].mealName, newSch.mealList[1].mainFood, newSch.mealList[1].drinks, newSch.mealList[1].snacks, newSch.mealList[1].mealPrice,
+					newSch.mealList[2].mealName, newSch.mealList[2].mainFood, newSch.mealList[2].drinks, newSch.mealList[2].snacks, newSch.mealList[2].mealPrice,
+					newSch.staff[0].staffID, newSch.staff[0].staffName,
+					newSch.staff[1].staffID, newSch.staff[1].staffName,
+					newSch.staff[2].staffID, newSch.staff[2].staffName,
+					newSch.staff[3].staffID, newSch.staff[3].staffName,
+					newSch.staff[4].staffID, newSch.staff[4].staffName,
+					newSch.staff[5].staffID, newSch.staff[5].staffName,
+					newSch.staff[6].staffID, newSch.staff[6].staffName,
+					newSch.staff[7].staffID, newSch.staff[7].staffName,
+					newSch.staff[8].staffID, newSch.staff[8].staffName,
+					newSch.staff[9].staffID, newSch.staff[9].staffName,
+					newSch.driver[0].driverID, newSch.driver[0].driverName,
+					newSch.driver[1].driverID, newSch.driver[1].driverName,
+					newSch.schTrnPrice,
+					newSch.status);
+					
+				printf("New Train Schedule Information has successfully added!!\n\n");
+				fclose(addSch);
 			}
-			fclose(getMeal);
-		}
 
-		//Enter staff list info
-		system("cls");
-
-		displayStaffList();
-
-		for (int i = 0; i < 10; i++) {
-			printf("\nEnter Staff [%d] for [ %s ] with Staff ID: ", i + 1, newSch.scheduleNo);
+			printf("Do you want to add more new train schedule information? ( Y = Yes ): ");
 			rewind(stdin);
-			scanf("%s", &newSch.staff[i].staffID);
-			lowerToUpper(newSch.staff[i].staffID, funcArrayLength(newSch.staff[i].staffID));
+			scanf("%c", &again);
 
-			FILE* getStaffID = fopen("staffList.txt", "r");
-			Staff staff;
-			if (!getStaffID) {
-				printf("\nError: Cannot open staffList.txt!!\n");
-				exit(-1);
+			if (toupper(again) == 'Y') {
+				system("cls");
+				addTrainSchedule();
 			}
 			else {
-				fseek(getStaffID, SEEK_SET, 0);
-				while (fscanf(getStaffID, "%[^|]|%[^\n]\n", &staff.staffID, &staff.staffName) != EOF) {
-					if (strcmp(newSch.staff[i].staffID, staff.staffID) == 0) {
-						strcpy(newSch.staff[i].staffName, staff.staffName);
-					}
-				}
-				fclose(getStaffID);
+				system("cls");
+				addFunction();
 			}
-		}
-
-		//Enter Price
-
-		system("cls");
-
-		printf("Enter Price for [ %s ]: ", newSch.scheduleNo);
-		scanf("%lf", &newSch.schTrnPrice);
-
-		//Status will be PREPARING
-		strcpy(newSch.status, "PREPARING");
-
-		FILE* addSch = fopen("trainSchedule.txt", "a");
-		if (!addSch) {
-			printf("Error: Cannot open trainSchedule.txt!!\n");
-			exit(-1);
-		}
-		else {
-			FILE* seatL = fopen("seatList.txt", "a");
-			if (!seatL) {
-				printf("Error: Cannot open seatList.txt!!\n");
-				exit(-1);
-			}
-			fprintf(seatL, "\n\n%s\n", newSch.scheduleNo);
-			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "A%02d|A\n", d + 1);
-			}
-			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "B%02d|A\n", d + 1);
-			}
-			for (int d = 0; d < 40; d++) {
-				fprintf(seatL, "C%02d|A\n", d + 1);
-			}
-			fclose(seatL);
-			fprintf(addSch, "%s|%s\n%s|%s\n%02d/%02d/%04d|%02d:%02d\n%02d/%02d/%04d|%02d:%02d\n%d\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s|%s|%s|%.2f\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%s|%s\n%.2f\n%s\n\n",
-				newSch.scheduleNo, newSch.trainID,
-				newSch.departureStation, newSch.arrivalStation,
-				newSch.departureDate.day, newSch.departureDate.month, newSch.departureDate.year, newSch.departureTime.hours, newSch.departureTime.minutes,
-				newSch.arrivalDate.day, newSch.arrivalDate.month, newSch.arrivalDate.year, newSch.arrivalTime.hours, newSch.arrivalTime.minutes,
-				newSch.duration,
-				newSch.mealList[0].mealName, newSch.mealList[0].mainFood, newSch.mealList[0].drinks, newSch.mealList[0].snacks, newSch.mealList[0].mealPrice,
-				newSch.mealList[1].mealName, newSch.mealList[1].mainFood, newSch.mealList[1].drinks, newSch.mealList[1].snacks, newSch.mealList[1].mealPrice,
-				newSch.mealList[2].mealName, newSch.mealList[2].mainFood, newSch.mealList[2].drinks, newSch.mealList[2].snacks, newSch.mealList[2].mealPrice,
-				newSch.staff[0].staffID, newSch.staff[0].staffName,
-				newSch.staff[1].staffID, newSch.staff[1].staffName,
-				newSch.staff[2].staffID, newSch.staff[2].staffName,
-				newSch.staff[3].staffID, newSch.staff[3].staffName,
-				newSch.staff[4].staffID, newSch.staff[4].staffName,
-				newSch.staff[5].staffID, newSch.staff[5].staffName,
-				newSch.staff[6].staffID, newSch.staff[6].staffName,
-				newSch.staff[7].staffID, newSch.staff[7].staffName,
-				newSch.staff[8].staffID, newSch.staff[8].staffName,
-				newSch.staff[9].staffID, newSch.staff[9].staffName,
-				newSch.driver[0].driverID, newSch.driver[0].driverName,
-				newSch.driver[1].driverID, newSch.driver[1].driverName,
-				newSch.schTrnPrice,
-				newSch.status);
-
-			fclose(addSch);
-		}
-
 	}
 
 }
