@@ -350,16 +350,20 @@ removeItem() {
 
 	while (fread(&lost, sizeof(Lost), 1, lostRemovePtr)) {
 		if (strcmp(lost.itemID, itemToRemove) != 0) {
-			printf("A record with requested name found and deleted.\n\n");
 			found = 1;
 		}
 		else {
 			fwrite(&lost, sizeof(Lost), 1, tempFile);
 		}
 	}
+
+	if (found == 1) {
+		printf("A record with requested name found and deleted.\n\n");
+	}
 	if (!found) {
 		printf("No match!\n");
 	}
+
 
 	fclose(lostRemovePtr);
 	fclose(tempFile);
@@ -483,11 +487,11 @@ staffdisplayStaffList() {
 	printf("STAFF LIST\n");
 	printf("==========\n\n");
 
-	printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
-	printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
+	printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
+	printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
 
 	while (fread(&sta[i], sizeof(Staff), 1, staff) != 0) {
-		printf("%-7s %-20s %-7c %-12s %-12s %-12s %-10d %s\n",
+		printf("%-7s %-20s %-7c %-12s %-25s %-12s %-10d %s\n",
 			sta[i].ID, sta[i].name, sta[i].gender, sta[i].phoneno,
 			sta[i].position, sta[i].date, sta[i].salary, sta[i].IC);
 		i++;
@@ -498,7 +502,6 @@ staffdisplayStaffList() {
 	printf("%d %s.\n\n", count, "staff displayed");
 
 	fclose(staff);
-	system("pause");
 }
 
 forgetPassword() {
@@ -535,21 +538,21 @@ forgetPassword() {
 		scanf("%s", &logPassphrase);
 
 		while (fread(&sta, sizeof(Staff), 1, staff)) {
-			if (strcmp(sta.ID, logID) == 0) {
-				if (strcmp(sta.IC, logIC) == 0) {
-					if (strcmp(sta.valid.passphrase, logPassphrase) == 0)
-						printf("Enter the new password: ");
-					scanf("%s", &newPassword);
-					if (strlen(&newPassword) <= 8) {
-						printf("Invalid Password!\n");
-					}
-					else {
-						break;
-					}
-					strcpy(sta.password, newPassword);
-				}
+			if (strcmp(sta.ID, logID) == 0 && strcmp(sta.IC, logIC) == 0 && strcmp(sta.valid.passphrase, logPassphrase) == 0) {
+				printf("Enter the new password: ");
+				rewind(stdin);
+				scanf("%s", newPassword);
+				strcpy(sta.password, newPassword);
+				found = 1;
 			}
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
+		}
+
+		if (!found) {
+			printf("Invalid credentials!\n");
+		}
+		else {
+			printf("Password updated successfully!\n\n");
 		}
 
 		fclose(staff);
@@ -557,11 +560,7 @@ forgetPassword() {
 
 		remove("staff.bin");
 		rename("temp.bin", "staff.bin");
-
-		printf("Password updated successfully!\n");
-
 	}
-	fclose(staff);
 }
 
 updateSalary() {
@@ -613,8 +612,9 @@ updatePosition() {
 	FILE* staff;
 	FILE* tempFile;
 	Staff sta;
-	char searchId[7];
-	char newPosition;
+	char searchId[8]; 
+	char newPosition[50]; 
+	char temp[100]; 
 
 	staff = fopen("staff.bin", "rb+");
 	tempFile = fopen("temp.bin", "wb");
@@ -625,21 +625,29 @@ updatePosition() {
 		exit(-1);
 	}
 	else {
-
 		printf("UPDATE POSITION\n");
 		printf("===============\n\n");
 
 		printf("Enter the ID of the staff member whose position you want to update: ");
-		scanf("%s", searchId);
+		scanf("%7s", searchId); 
+		fgets(temp, sizeof(temp), stdin);
+
+		int found = 0;
 
 		while (fread(&sta, sizeof(Staff), 1, staff)) {
 			if (strcmp(sta.ID, searchId) == 0) {
+				found = 1;
 				printf("Current position of %s: %s\n", sta.name, sta.position);
 				printf("Enter the new position: ");
-				scanf("%s", &newPosition);
+				fgets(newPosition, sizeof(newPosition), stdin);
+				newPosition[strcspn(newPosition, "\n")] = '\0';
 				strcpy(sta.position, newPosition);
 			}
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
+		}
+
+		if (!found) {
+			printf("Staff member with ID %s not found.\n", searchId);
 		}
 
 		fclose(staff);
@@ -648,7 +656,7 @@ updatePosition() {
 		remove("staff.bin");
 		rename("temp.bin", "staff.bin");
 
-		printf("Position updated successfully!\n");
+		printf("Position updated successfully!\n\n");
 	}
 }
 
@@ -688,8 +696,9 @@ updateContact() {
 	FILE* staff;
 	FILE* tempFile;
 	Staff sta;
-	char searchId[7];
-	char newContact;
+	char searchId[8];
+	char newContact[12];
+	char temp[100];
 
 	staff = fopen("staff.bin", "rb+");
 	tempFile = fopen("temp.bin", "wb");
@@ -700,20 +709,30 @@ updateContact() {
 		exit(-1);
 	}
 	else {
+		int found = 0;
+
 		printf("UPDATE CONTACT\n");
 		printf("==============\n\n");
 
 		printf("Enter your ID: ");
+		rewind(stdin);
 		scanf("%s", searchId);
 
 		while (fread(&sta, sizeof(Staff), 1, staff)) {
 			if (strcmp(sta.ID, searchId) == 0) {
+				found = 1;
 				printf("Current contact of %s is %s\n", sta.name, sta.phoneno);
 				printf("Enter the new contact: ");
-				scanf("%s", &newContact);
+				rewind(stdin);
+				fgets(newContact, sizeof(newContact), stdin);
+				newContact[strcspn(newContact, "\n")] = '\0';
 				strcpy(sta.phoneno, newContact);
 			}
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
+		}
+
+		if (!found) {
+			printf("Staff member with ID %s not found.\n", searchId);
 		}
 
 		fclose(staff);
@@ -722,8 +741,9 @@ updateContact() {
 		remove("staff.bin");
 		rename("temp.bin", "staff.bin");
 
-		printf("Contact updated successfully!\n");
+		printf("Contact updated successfully!\n\n");
 	}
+	
 }
 
 updateStaInfo() {
@@ -762,8 +782,9 @@ updatePassword() {
 	FILE* staff;
 	FILE* tempFile;
 	Staff sta;
-	char searchId[7];
-	char newPassword;
+	char searchId[8];
+	char newPassword[20];
+	char temp[100];
 
 	staff = fopen("staff.bin", "rb+");
 	tempFile = fopen("temp.bin", "wb");
@@ -774,30 +795,30 @@ updatePassword() {
 		exit(-1);
 	}
 	else {
+		int found = 0;
+
 		printf("CHANGE THE PASSWORD\n");
 		printf("===================\n\n");
 
 		printf("Enter your ID: ");
+		rewind(stdin);
 		scanf("%s", searchId);
 
 		while (fread(&sta, sizeof(Staff), 1, staff)) {
 			if (strcmp(sta.ID, searchId) == 0) {
+				found = 1;
 				printf("Current password of %s is %s\n", sta.name, sta.password);
 				printf("Enter the new password: ");
-				scanf("%s", &newPassword);
-				strcpy(sta.password, newPassword);
-
-				printf("Enter the password again: ");
 				rewind(stdin);
-				scanf("%s", sta.valid.passwordvalid);
-				if (strcmp(sta.password, sta.valid.passwordvalid) != 0) {
-					printf("Password doesn't match!\n");
-				}
-				else {
-					break;
-				}
+				fgets(newPassword, sizeof(newPassword), stdin);
+				newPassword[strcspn(newPassword, "\n")] = '\0';
+				strcpy(sta.password, newPassword);
 			}
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
+		}
+
+		if (!found) {
+			printf("Staff member with ID %s not found.\n", searchId);
 		}
 
 		fclose(staff);
@@ -806,9 +827,9 @@ updatePassword() {
 		remove("staff.bin");
 		rename("temp.bin", "staff.bin");
 
-		printf("Password updated successfully!\n");
-
+		printf("Password updated successfully!\n\n");
 	}
+
 }
 
 searchStaff(Staff sta[], int i) {
@@ -816,6 +837,7 @@ searchStaff(Staff sta[], int i) {
 	FILE* staff;
 	staff = fopen("staff.bin", "rb");
 	char searchId[7];
+	char searchId2[7];
 	char ans;
 
 	system("cls");
@@ -826,8 +848,10 @@ searchStaff(Staff sta[], int i) {
 	else {
 		do {
 			int found = 0;
+			system("cls");
 			printf("SEARCH STAFF\n");
 			printf("============\n\n");
+
 
 			printf("Enter ID of staff to view: ");
 			scanf("%s", searchId);
@@ -835,22 +859,25 @@ searchStaff(Staff sta[], int i) {
 			while (fread(&sta[i], sizeof(Staff), 1, staff)) {
 				if (strcmp(searchId, sta[i].ID) == 0) {
 					found = 1;
-					printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
-					printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
-					printf("%-7s %-20s %-7c %-12s %-12s %-12s %-10d %s\n",
+					printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
+					printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
+					printf("%-7s %-20s %-7c %-12s %-25s %-12s %-10d %s\n",
 						sta[i].ID, sta[i].name, sta[i].gender, sta[i].phoneno,
 						sta[i].position, sta[i].date, sta[i].salary, sta[i].IC);
 					break;
 				}
 			}
+
 			if (!found) {
-				printf("Not found!!\n");
+				printf("Invalid ID. \n\n");
 			}
 
 			printf("\n\n");
-			printf("View another (Y=yes)? ");
+			printf("View another or Enter again (Y=yes)? ");
 			scanf(" %c", &ans);
+
 		} while (toupper(ans) == 'Y');
+
 	}
 
 	fclose(staff);
@@ -882,12 +909,14 @@ removeStaff() {
 
 	while (fread(&sta, sizeof(Staff), 1, staff)) {
 		if (strcmp(sta.ID, idToRemove) != 0) {
-			printf("A record with requested name found and deleted.\n\n");
 			found = 1;
 		}
 		else {
 			fwrite(&sta, sizeof(Staff), 1, tempFile);
 		}
+	}
+	if (found == 1) {
+		printf("A record with requested name found and deleted.\n\n");
 	}
 	if (!found) {
 		printf("No match!\n");
@@ -900,7 +929,6 @@ removeStaff() {
 
 	rename("temp.bin", "staff.bin");
 
-	system("pause");
 }
 
 generateReportStaff() {
@@ -920,21 +948,25 @@ generateReportStaff() {
 	else {
 		do {
 			int found = 0;
+			int count = 0;
 			printf("REPORT\n");
 			printf("======\n\n");
 
 			printf("Enter position that you want to view: ");
 			scanf("%s", &searchPosition);
 
+			printf("\n\n");
+
 			while (fread(&sta, sizeof(Staff), 1, staff)) {
 				if (strcmp(searchPosition, sta.position) == 0) {
 					if (!headerPrinted) {
-						printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
-						printf("%-7s %-20s %-7s %-12s %-12s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
+						printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "ID", "NAME", "GENDER", "CONTACT", "JOB TITLE", "DATE JOINED", "SALARY(RM)", "IC");
+						printf("%-7s %-20s %-7s %-12s %-25s %-12s %-6s %-10s\n", "======", "====", "======", "=======", "=========", "===========", "==========", "============");
 						headerPrinted = 1;
 					}
 					found = 1;
-					printf("%-7s %-20s %-7c %-12s %-12s %-12s %-10d %s\n",
+					count++;
+					printf("%-7s %-20s %-7c %-12s %-25s %-12s %-10d %s\n",
 						sta.ID, sta.name, sta.gender, sta.phoneno,
 						sta.position, sta.date, sta.salary, sta.IC);
 				}
@@ -943,11 +975,14 @@ generateReportStaff() {
 				printf("No staff found with the specified position.\n");
 			}
 
+			printf("\n\n");
+			printf("There are %d %s.\n\n", count, searchPosition);
 			printf("View another (Y=yes)? ");
 			scanf(" %c", &ans);
 		} while (toupper(ans) == 'Y');
 	}
 	fclose(staff);
+	system("pause");
 }
 
 managerSecondMenu() {
@@ -1029,7 +1064,8 @@ managerFirstMenu() {
 			break;
 
 		case 4:
-			displayStaffList();
+			staffdisplayStaffList();
+			system("pause");
 			break;
 
 		case 5:
@@ -1063,10 +1099,9 @@ staffFirstMenu() {
 		printf("3.Item Found!\n");
 		printf("4.Show the list\n");
 		printf("5.Remove item\n");
-		printf("6.Remove Staff\n\n");
-		printf("7.Exit\n");
+		printf("6.Exit\n");
 		printf("Enter the number: ");
-		option = getValidChoice(1, 7);
+		option = getValidChoice(1, 6);
 		system("cls");
 		switch (option) {
 
@@ -1076,6 +1111,7 @@ staffFirstMenu() {
 
 		case 2:
 			staffdisplayStaffList();
+			system("pause");
 			break;
 
 		case 3:
@@ -1092,14 +1128,10 @@ staffFirstMenu() {
 			break;
 
 		case 6:
-			removeStaff(sta, MAXSTAFF);
-			break;
-
-		case 7:
 			printf("Exit now.........\n");
 			printf("\n\n");
 			break;
 		}
-	} while (option != 7);
+	} while (option != 6);
 }
 
